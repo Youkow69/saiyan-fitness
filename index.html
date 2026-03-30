@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5,user-scalable=yes,viewport-fit=cover">
+<meta name="theme-color" content="#0a0a0f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Saiyan Fitness">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="msapplication-TileColor" content="#FFD700">
+<meta name="format-detection" content="telephone=no">
+<meta name="referrer" content="no-referrer">
+<title>Saiyan Fitness — Power Up Your Training</title>
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+
+<!-- CDN Libraries -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/htm@3.1.1/dist/htm.umd.js"></script>
+<script src="https://unpkg.com/recharts@2.8.0/umd/Recharts.js"></script>
+
+<script>
+tailwind.config={theme:{extend:{colors:{ki:{gold:'#FFD700',orange:'#FF8C00'},ssj:{pink:'#FF4C6A',blue:'#00BFFF'},scouter:'#00FF88',senzu:'#32CD32',dbz:{bg:'#0a0a0f',card:'#12121a',surface:'#1a1a2e'}},fontFamily:{display:['Bebas Neue','sans-serif'],body:['DM Sans','sans-serif'],power:['Orbitron','sans-serif']}}}}
+</script>
+
+<style>
+/* ===== GLOBAL RESET & MOBILE OPTIMIZATION ===== */
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none}
+:root{--bg-primary:#0a0a0f;--bg-secondary:#12121a;--bg-card:rgba(26,26,46,0.8);--bg-card-border:rgba(255,215,0,0.12);--ki-gold:#FFD700;--ssj-orange:#FF8C00;--ssjgod-pink:#FF4C6A;--ssjblue:#00BFFF;--senzu-green:#32CD32;--scouter-green:#00FF88;--safe-top:env(safe-area-inset-top,0px);--safe-bottom:env(safe-area-inset-bottom,0px);--safe-left:env(safe-area-inset-left,0px);--safe-right:env(safe-area-inset-right,0px)}
+
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;overflow-x:hidden;height:100%}
+body{background:var(--bg-primary);color:#fff;font-family:'DM Sans',sans-serif;overflow-x:hidden;overscroll-behavior:none;-webkit-overflow-scrolling:touch;min-height:100%;min-height:100dvh;position:relative}
+#root{min-height:100vh;min-height:100dvh}
+
+/* Prevent input zoom on iOS (font-size >= 16px) */
+input,select,textarea{font-size:16px!important;border-radius:0;-webkit-appearance:none;appearance:none}
+input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+input[type=number]{-moz-appearance:textfield}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(255,215,0,0.2);border-radius:2px}
+
+/* ===== GPU ACCELERATION & PERFORMANCE ===== */
+.gpu{will-change:transform;transform:translateZ(0);-webkit-transform:translateZ(0)}
+.smooth-scroll{-webkit-overflow-scrolling:touch;overflow-scrolling:touch;scroll-behavior:smooth}
+
+/* ===== ANIMATIONS ===== */
+@keyframes aura-white{0%,100%{box-shadow:0 0 15px rgba(255,255,255,0.15),0 0 30px rgba(255,255,255,0.08)}50%{box-shadow:0 0 25px rgba(255,255,255,0.3),0 0 50px rgba(255,255,255,0.15)}}
+@keyframes aura-yellow{0%,100%{box-shadow:0 0 15px rgba(255,215,0,0.25),0 0 35px rgba(255,200,0,0.15),0 0 60px rgba(255,200,0,0.08)}50%{box-shadow:0 0 25px rgba(255,215,0,0.4),0 0 55px rgba(255,200,0,0.25),0 0 85px rgba(255,200,0,0.12)}}
+@keyframes aura-pink{0%,100%{box-shadow:0 0 15px rgba(255,76,106,0.25),0 0 40px rgba(255,76,106,0.12)}50%{box-shadow:0 0 30px rgba(255,76,106,0.4),0 0 65px rgba(255,76,106,0.2)}}
+@keyframes aura-blue{0%,100%{box-shadow:0 0 20px rgba(0,191,255,0.3),0 0 45px rgba(0,191,255,0.15),0 0 80px rgba(0,191,255,0.08)}50%{box-shadow:0 0 35px rgba(0,191,255,0.5),0 0 70px rgba(0,191,255,0.25),0 0 100px rgba(0,191,255,0.12)}}
+@keyframes lightning{0%,100%{opacity:0}10%{opacity:0.8}20%{opacity:0}30%{opacity:0.6}40%{opacity:0}85%{opacity:0.5}90%{opacity:0}}
+@keyframes ki-glow{0%,100%{box-shadow:0 4px 15px rgba(255,215,0,0.35)}50%{box-shadow:0 4px 25px rgba(255,140,0,0.55)}}
+@keyframes float{0%,100%{transform:translateY(0) translateZ(0)}50%{transform:translateY(-6px) translateZ(0)}}
+@keyframes shake{0%,100%{transform:translateX(0)}10%{transform:translateX(-6px)}20%{transform:translateX(6px)}30%{transform:translateX(-5px)}40%{transform:translateX(5px)}50%{transform:translateX(-3px)}60%{transform:translateX(3px)}}
+@keyframes flash-gold{0%{opacity:0.7}100%{opacity:0}}
+@keyframes spin-ki{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+@keyframes fade-in-up{from{opacity:0;transform:translate3d(0,16px,0)}to{opacity:1;transform:translate3d(0,0,0)}}
+@keyframes streak-flame{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+@keyframes pulse-soft{0%,100%{opacity:0.7}50%{opacity:1}}
+@keyframes scouter-scan{0%,100%{border-color:rgba(0,255,136,0.25);box-shadow:0 0 20px rgba(0,255,136,0.05)}50%{border-color:rgba(0,255,136,0.7);box-shadow:0 0 30px rgba(0,255,136,0.15)}}
+@keyframes db-glow{0%,100%{filter:drop-shadow(0 0 3px rgba(255,165,0,0.3))}50%{filter:drop-shadow(0 0 10px rgba(255,165,0,0.7))}}
+@keyframes skeleton{0%{background-position:200% 0}100%{background-position:-200% 0}}
+@keyframes nav-indicator{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes circular-fill{from{stroke-dashoffset:var(--circ)}to{stroke-dashoffset:var(--fill-offset)}}
+@keyframes gradient-border{0%,100%{border-color:rgba(255,215,0,0.15)}50%{border-color:rgba(255,215,0,0.4)}}
+
+.aura-white{animation:aura-white 2.5s ease-in-out infinite}
+.aura-yellow{animation:aura-yellow 2s ease-in-out infinite}
+.aura-pink{animation:aura-pink 2.5s ease-in-out infinite}
+.aura-blue{animation:aura-blue 2s ease-in-out infinite}
+.float-anim{animation:float 3.5s ease-in-out infinite}
+.streak-fire{animation:streak-flame 1s ease-in-out infinite}
+.db-glow{animation:db-glow 2s ease-in-out infinite}
+.scouter-ring{animation:scouter-scan 2.5s ease-in-out infinite}
+
+.lightning-effect{position:relative}
+.lightning-effect::after{content:'';position:absolute;inset:-4px;background:linear-gradient(45deg,transparent 40%,rgba(100,180,255,0.5) 44%,transparent 48%,transparent 68%,rgba(100,180,255,0.3) 72%,transparent 76%);animation:lightning 2.5s infinite;pointer-events:none;border-radius:inherit;z-index:1}
+
+/* Cards */
+.card-glass{background:rgba(26,26,46,0.75);border:1px solid rgba(255,215,0,0.1);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-radius:16px;transition:transform 0.2s ease,box-shadow 0.2s ease}
+.card-glass:active{transform:scale(0.98)}
+.card-glow{animation:gradient-border 3s ease-in-out infinite}
+
+/* Buttons */
+.ki-btn{background:linear-gradient(135deg,#FFD700 0%,#FF8C00 50%,#FF4500 100%);animation:ki-glow 2.5s ease-in-out infinite;transition:transform 0.15s ease;min-height:48px;border:none;cursor:pointer;font-weight:700;letter-spacing:0.5px}
+.ki-btn:active{transform:scale(0.95)!important}
+.touch-btn{min-height:44px;min-width:44px;display:flex;align-items:center;justify-content:center;transition:transform 0.12s ease,background 0.12s ease;cursor:pointer}
+.touch-btn:active{transform:scale(0.92)}
+
+/* Nav */
+.nav-glass{background:rgba(0,0,0,0.88);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,0.06)}
+
+/* Skeleton */
+.skeleton{background:linear-gradient(90deg,rgba(255,255,255,0.03) 25%,rgba(255,255,255,0.08) 50%,rgba(255,255,255,0.03) 75%);background-size:400% 100%;animation:skeleton 1.8s ease-in-out infinite;border-radius:8px}
+
+/* Scrolling helpers */
+.hide-scroll::-webkit-scrollbar{display:none}
+.hide-scroll{-ms-overflow-style:none;scrollbar-width:none}
+.scroll-snap{scroll-snap-type:x mandatory;-webkit-scroll-snap-type:x mandatory}
+.scroll-snap>*{scroll-snap-align:start}
+
+/* Fade animations */
+.fade-in{animation:fade-in-up 0.35s ease-out both}
+.fade-1{animation-delay:0.05s}.fade-2{animation-delay:0.1s}.fade-3{animation-delay:0.15s}.fade-4{animation-delay:0.2s}.fade-5{animation-delay:0.25s}.fade-6{animation-delay:0.3s}.fade-7{animation-delay:0.35s}.fade-8{animation-delay:0.4s}
+
+/* Image loading */
+.img-loading{background:rgba(255,255,255,0.03);min-height:60px}
+.char-img{object-fit:contain;image-rendering:auto;-webkit-user-drag:none;user-select:none;pointer-events:none}
+
+/* Page bg gradients */
+.page-bg-home{background:linear-gradient(180deg,rgba(255,215,0,0.03) 0%,transparent 40%)}
+.page-bg-train{background:linear-gradient(180deg,rgba(255,140,0,0.03) 0%,transparent 40%)}
+.page-bg-stats{background:linear-gradient(180deg,rgba(0,255,136,0.03) 0%,transparent 40%)}
+.page-bg-nutri{background:linear-gradient(180deg,rgba(50,205,50,0.03) 0%,transparent 40%)}
+.page-bg-profile{background:linear-gradient(180deg,rgba(0,191,255,0.03) 0%,transparent 40%)}
+
+/* Tab transition */
+.page-enter{animation:fade-in-up 0.25s ease-out both}
+
+/* Reduced motion */
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;animation-iteration-count:1!important;transition-duration:0.01ms!important;scroll-behavior:auto!important}}
+</style>
+
+<!-- PWA Manifest (inline base64) -->
+<link rel="manifest" href="data:application/json;charset=utf-8;base64,eyJuYW1lIjoiU2FpeWFuIEZpdG5lc3MiLCJzaG9ydF9uYW1lIjoiU2FpeWFuIEZpdCIsImRlc2NyaXB0aW9uIjoiUG93ZXIgVXAgWW91ciBUcmFpbmluZyAtIERCWiBGaXRuZXNzIFRyYWNrZXIiLCJzdGFydF91cmwiOiIuIiwiZGlzcGxheSI6InN0YW5kYWxvbmUiLCJiYWNrZ3JvdW5kX2NvbG9yIjoiIzBhMGEwZiIsInRoZW1lX2NvbG9yIjoiIzBhMGEwZiIsIm9yaWVudGF0aW9uIjoicG9ydHJhaXQifQ==">
+</head>
+<body>
+<div id="root"></div>
+
+<script>
+'use strict';
+const html=htm.bind(React.createElement);
+const{useState,useEffect,useRef,useCallback,useMemo,memo}=React;
+
+/* =========================================
+   CONSTANTS: IMAGES
+   ========================================= */
+/* Direct stickpng.com URLs — verified HTTP 200 with real PNG data, no proxy needed */
+const S='https://assets.stickpng.com/images/';
+const IMG={
+  goku_base:  S+'580b57fcd9996e24bc43c321.png',
+  vegeta:     S+'580b57fcd9996e24bc43c325.png',
+  gohan:      S+'580b57fcd9996e24bc43c326.png',
+  piccolo:    S+'580b57fcd9996e24bc43c327.png',
+  trunks:     S+'580b57fcd9996e24bc43c328.png',
+  krillin:    S+'580b57fcd9996e24bc43c329.png',
+  frieza:     S+'580b57fcd9996e24bc43c322.png',
+  cell:       S+'580b57fcd9996e24bc43c323.png',
+  buu:        S+'580b57fcd9996e24bc43c324.png',
+  broly:      S+'580b57fcd9996e24bc43c330.png',
+  beerus:     S+'580b57fcd9996e24bc43c331.png',
+  goku_ssj:   S+'580b57fcd9996e24bc43c332.png',
+  goku_blue:  S+'580b57fcd9996e24bc43c333.png',
+  shenron:    S+'580b57fcd9996e24bc43c334.png',
+  vegeta_blue:S+'580b57fcd9996e24bc43c335.png',
+  whis:       S+'580b57fcd9996e24bc43c327.png',
+  dragonballs:S+'580b57fcd9996e24bc43c334.png'
+};
+
+/* Character display names + color for fallback badges */
+const CHAR_META={
+  krillin:{name:'Krillin',color:'#FFD700',initials:'KR'},
+  goku_base:{name:'Goku',color:'#FF8C00',initials:'GK'},
+  goku_ssj:{name:'Goku SSJ',color:'#FFD700',initials:'SSJ'},
+  goku_blue:{name:'Goku Blue',color:'#00BFFF',initials:'SSB'},
+  vegeta:{name:'Vegeta',color:'#1E90FF',initials:'VG'},
+  vegeta_blue:{name:'Vegeta Blue',color:'#00BFFF',initials:'VB'},
+  gohan:{name:'Gohan',color:'#9B59B6',initials:'GH'},
+  trunks:{name:'Trunks',color:'#9B59B6',initials:'TR'},
+  piccolo:{name:'Piccolo',color:'#32CD32',initials:'PC'},
+  frieza:{name:'Frieza',color:'#9B59B6',initials:'FZ'},
+  cell:{name:'Cell',color:'#32CD32',initials:'CL'},
+  shenron:{name:'Shenron',color:'#32CD32',initials:'SH'},
+  dragonballs:{name:'Dragon Balls',color:'#FF8C00',initials:'DB'},
+  broly:{name:'Broly',color:'#32CD32',initials:'BR'},
+  buu:{name:'Buu',color:'#FF69B4',initials:'BU'},
+  beerus:{name:'Beerus',color:'#9B59B6',initials:'BE'},
+  whis:{name:'Whis',color:'#00BFFF',initials:'WH'}
+};
+
+/* =========================================
+   CONSTANTS: EXERCISES (83)
+   ========================================= */
+const EXERCISES=[
+{id:'bench',nameFr:'Développé couché',muscle:'Pectoraux',type:'compound',equipment:'Barre',difficulty:2},
+{id:'incline_bench',nameFr:'Développé incliné',muscle:'Pectoraux',type:'compound',equipment:'Barre',difficulty:2},
+{id:'decline_bench',nameFr:'Développé décliné',muscle:'Pectoraux',type:'compound',equipment:'Barre',difficulty:2},
+{id:'db_fly',nameFr:'Écarté haltères',muscle:'Pectoraux',type:'isolation',equipment:'Haltères',difficulty:1},
+{id:'cable_fly',nameFr:'Écarté poulie',muscle:'Pectoraux',type:'isolation',equipment:'Poulie',difficulty:1},
+{id:'dips_chest',nameFr:'Dips',muscle:'Pectoraux',type:'compound',equipment:'Poids de corps',difficulty:2},
+{id:'pushups',nameFr:'Pompes',muscle:'Pectoraux',type:'compound',equipment:'Poids de corps',difficulty:1},
+{id:'pullover_c',nameFr:'Pullover',muscle:'Pectoraux',type:'isolation',equipment:'Haltère',difficulty:2},
+{id:'butterfly',nameFr:'Butterfly',muscle:'Pectoraux',type:'isolation',equipment:'Machine',difficulty:1},
+{id:'cable_cross',nameFr:'Cross-over poulie',muscle:'Pectoraux',type:'isolation',equipment:'Poulie',difficulty:2},
+{id:'pullups',nameFr:'Tractions',muscle:'Dos',type:'compound',equipment:'Poids de corps',difficulty:3},
+{id:'barbell_row',nameFr:'Rowing barre',muscle:'Dos',type:'compound',equipment:'Barre',difficulty:2},
+{id:'db_row',nameFr:'Rowing haltère',muscle:'Dos',type:'compound',equipment:'Haltère',difficulty:2},
+{id:'lat_pulldown',nameFr:'Tirage vertical',muscle:'Dos',type:'compound',equipment:'Poulie',difficulty:1},
+{id:'seated_row',nameFr:'Tirage horizontal',muscle:'Dos',type:'compound',equipment:'Poulie',difficulty:1},
+{id:'tbar_row',nameFr:'Rowing T-bar',muscle:'Dos',type:'compound',equipment:'Machine',difficulty:2},
+{id:'pullover_cable',nameFr:'Pullover poulie',muscle:'Dos',type:'isolation',equipment:'Poulie',difficulty:1},
+{id:'shrugs',nameFr:'Shrugs',muscle:'Dos',type:'isolation',equipment:'Haltères',difficulty:1},
+{id:'face_pull',nameFr:'Face pull',muscle:'Dos',type:'isolation',equipment:'Poulie',difficulty:1},
+{id:'deadlift',nameFr:'Soulevé de terre',muscle:'Dos',type:'compound',equipment:'Barre',difficulty:3},
+{id:'good_morning',nameFr:'Good morning',muscle:'Dos',type:'compound',equipment:'Barre',difficulty:2},
+{id:'ohp',nameFr:'Développé militaire',muscle:'Épaules',type:'compound',equipment:'Barre',difficulty:2},
+{id:'lateral_raise',nameFr:'Élévations latérales',muscle:'Épaules',type:'isolation',equipment:'Haltères',difficulty:1},
+{id:'front_raise',nameFr:'Élévations frontales',muscle:'Épaules',type:'isolation',equipment:'Haltères',difficulty:1},
+{id:'rear_delt',nameFr:'Oiseau',muscle:'Épaules',type:'isolation',equipment:'Haltères',difficulty:1},
+{id:'arnold_press',nameFr:'Arnold press',muscle:'Épaules',type:'compound',equipment:'Haltères',difficulty:2},
+{id:'upright_row',nameFr:'Upright row',muscle:'Épaules',type:'compound',equipment:'Barre',difficulty:2},
+{id:'face_pull_s',nameFr:'Face pull épaules',muscle:'Épaules',type:'isolation',equipment:'Poulie',difficulty:1},
+{id:'db_press_s',nameFr:'Développé haltères assis',muscle:'Épaules',type:'compound',equipment:'Haltères',difficulty:2},
+{id:'barbell_curl',nameFr:'Curl barre',muscle:'Biceps',type:'isolation',equipment:'Barre',difficulty:1},
+{id:'db_curl',nameFr:'Curl haltère',muscle:'Biceps',type:'isolation',equipment:'Haltères',difficulty:1},
+{id:'hammer_curl',nameFr:'Curl marteau',muscle:'Biceps',type:'isolation',equipment:'Haltères',difficulty:1},
+{id:'preacher_curl',nameFr:'Curl pupitre',muscle:'Biceps',type:'isolation',equipment:'Machine',difficulty:1},
+{id:'conc_curl',nameFr:'Curl concentré',muscle:'Biceps',type:'isolation',equipment:'Haltère',difficulty:1},
+{id:'cable_curl',nameFr:'Curl poulie',muscle:'Biceps',type:'isolation',equipment:'Poulie',difficulty:1},
+{id:'incline_curl',nameFr:'Curl incliné',muscle:'Biceps',type:'isolation',equipment:'Haltères',difficulty:2},
+{id:'ez_curl',nameFr:'Curl barre EZ',muscle:'Biceps',type:'isolation',equipment:'Barre EZ',difficulty:1},
+{id:'tricep_push',nameFr:'Extension poulie haute',muscle:'Triceps',type:'isolation',equipment:'Poulie',difficulty:1},
+{id:'rope_ext',nameFr:'Extension corde',muscle:'Triceps',type:'isolation',equipment:'Poulie',difficulty:1},
+{id:'dips_tri',nameFr:'Dips triceps',muscle:'Triceps',type:'compound',equipment:'Poids de corps',difficulty:2},
+{id:'skullcrusher',nameFr:'Skullcrusher',muscle:'Triceps',type:'isolation',equipment:'Barre EZ',difficulty:2},
+{id:'kickback',nameFr:'Kickback',muscle:'Triceps',type:'isolation',equipment:'Haltère',difficulty:1},
+{id:'overhead_ext',nameFr:'Extension overhead',muscle:'Triceps',type:'isolation',equipment:'Haltère',difficulty:2},
+{id:'bar_front',nameFr:'Barre au front',muscle:'Triceps',type:'isolation',equipment:'Barre',difficulty:2},
+{id:'pushdown',nameFr:'Push-down',muscle:'Triceps',type:'isolation',equipment:'Poulie',difficulty:1},
+{id:'squat',nameFr:'Squat',muscle:'Jambes',type:'compound',equipment:'Barre',difficulty:3},
+{id:'leg_press',nameFr:'Leg press',muscle:'Jambes',type:'compound',equipment:'Machine',difficulty:2},
+{id:'lunges',nameFr:'Fentes',muscle:'Jambes',type:'compound',equipment:'Haltères',difficulty:2},
+{id:'leg_ext',nameFr:'Leg extension',muscle:'Jambes',type:'isolation',equipment:'Machine',difficulty:1},
+{id:'leg_curl',nameFr:'Leg curl',muscle:'Jambes',type:'isolation',equipment:'Machine',difficulty:1},
+{id:'hip_thrust',nameFr:'Hip thrust',muscle:'Jambes',type:'compound',equipment:'Barre',difficulty:2},
+{id:'calf_stand',nameFr:'Mollets debout',muscle:'Jambes',type:'isolation',equipment:'Machine',difficulty:1},
+{id:'calf_seated',nameFr:'Mollets assis',muscle:'Jambes',type:'isolation',equipment:'Machine',difficulty:1},
+{id:'bulgarian',nameFr:'Squat bulgare',muscle:'Jambes',type:'compound',equipment:'Haltères',difficulty:3},
+{id:'hack_squat',nameFr:'Hack squat',muscle:'Jambes',type:'compound',equipment:'Machine',difficulty:2},
+{id:'goblet_squat',nameFr:'Goblet squat',muscle:'Jambes',type:'compound',equipment:'Haltère',difficulty:1},
+{id:'h_leg_press',nameFr:'Presse horizontale',muscle:'Jambes',type:'compound',equipment:'Machine',difficulty:1},
+{id:'crunch',nameFr:'Crunch',muscle:'Abdos',type:'isolation',equipment:'Poids de corps',difficulty:1},
+{id:'oblique_c',nameFr:'Crunch oblique',muscle:'Abdos',type:'isolation',equipment:'Poids de corps',difficulty:1},
+{id:'plank',nameFr:'Planche',muscle:'Abdos',type:'isometric',equipment:'Poids de corps',difficulty:1},
+{id:'leg_raise',nameFr:'Relevé jambes',muscle:'Abdos',type:'isolation',equipment:'Poids de corps',difficulty:2},
+{id:'ab_wheel',nameFr:'Ab wheel',muscle:'Abdos',type:'compound',equipment:'Roulette',difficulty:3},
+{id:'cable_crunch',nameFr:'Cable crunch',muscle:'Abdos',type:'isolation',equipment:'Poulie',difficulty:1},
+{id:'side_plank',nameFr:'Gainage latéral',muscle:'Abdos',type:'isometric',equipment:'Poids de corps',difficulty:1},
+{id:'mt_climbers',nameFr:'Mountain climbers',muscle:'Abdos',type:'compound',equipment:'Poids de corps',difficulty:2},
+{id:'running',nameFr:'Course',muscle:'Cardio',type:'cardio',equipment:'Aucun',difficulty:1},
+{id:'cycling',nameFr:'Vélo',muscle:'Cardio',type:'cardio',equipment:'Machine',difficulty:1},
+{id:'rowing_c',nameFr:'Rameur',muscle:'Cardio',type:'cardio',equipment:'Machine',difficulty:2},
+{id:'jump_rope',nameFr:'Corde à sauter',muscle:'Cardio',type:'cardio',equipment:'Corde',difficulty:1},
+{id:'burpees',nameFr:'Burpees',muscle:'Cardio',type:'cardio',equipment:'Poids de corps',difficulty:3},
+{id:'battle_rope',nameFr:'Battle rope',muscle:'Cardio',type:'cardio',equipment:'Corde',difficulty:2},
+{id:'hiit',nameFr:'HIIT',muscle:'Cardio',type:'cardio',equipment:'Varié',difficulty:3},
+{id:'incline_walk',nameFr:'Marche inclinée',muscle:'Cardio',type:'cardio',equipment:'Tapis',difficulty:1},
+// 10+11+8+8+8+12+8+8 = 73 + extras below
+{id:'db_bench',nameFr:'Développé couché haltères',muscle:'Pectoraux',type:'compound',equipment:'Haltères',difficulty:2},
+{id:'close_grip_bench',nameFr:'Développé serré',muscle:'Triceps',type:'compound',equipment:'Barre',difficulty:2},
+{id:'sumo_deadlift',nameFr:'Soulevé sumo',muscle:'Jambes',type:'compound',equipment:'Barre',difficulty:3},
+{id:'rdl',nameFr:'Romanian deadlift',muscle:'Jambes',type:'compound',equipment:'Barre',difficulty:2},
+{id:'cable_lateral',nameFr:'Élévation latérale poulie',muscle:'Épaules',type:'isolation',equipment:'Poulie',difficulty:1},
+{id:'seated_calf',nameFr:'Mollets machine assise',muscle:'Jambes',type:'isolation',equipment:'Machine',difficulty:1},
+{id:'v_up',nameFr:'V-up',muscle:'Abdos',type:'isolation',equipment:'Poids de corps',difficulty:2},
+{id:'hanging_raise',nameFr:'Relevé jambes suspendu',muscle:'Abdos',type:'isolation',equipment:'Barre fixe',difficulty:3},
+{id:'incline_db_curl',nameFr:'Curl incliné haltères',muscle:'Biceps',type:'isolation',equipment:'Haltères',difficulty:2},
+{id:'spider_curl',nameFr:'Spider curl',muscle:'Biceps',type:'isolation',equipment:'Barre EZ',difficulty:2}
+];
+
+/* =========================================
+   CONSTANTS: FOODS (150)
+   ========================================= */
+const FOODS=[
+{name:'Poulet (blanc)',cal:165,p:31,c:0,f:3.6},{name:'Bœuf haché 5%',cal:137,p:21,c:0,f:5},{name:'Saumon',cal:208,p:20,c:0,f:13},{name:'Thon en boîte',cal:116,p:26,c:0,f:1},{name:'Œuf entier',cal:155,p:13,c:1.1,f:11},{name:'Blanc d\'œuf',cal:52,p:11,c:0.7,f:0.2},{name:'Dinde',cal:135,p:30,c:0,f:1},{name:'Porc (filet)',cal:143,p:26,c:0,f:3.5},{name:'Crevettes',cal:85,p:20,c:0,f:0.5},{name:'Cabillaud',cal:82,p:18,c:0,f:0.7},
+{name:'Steak haché 15%',cal:250,p:17,c:0,f:20},{name:'Jambon blanc',cal:115,p:21,c:1,f:3},{name:'Sardines',cal:208,p:25,c:0,f:11},{name:'Agneau',cal:294,p:25,c:0,f:21},{name:'Canard',cal:337,p:19,c:0,f:28},
+{name:'Riz blanc cuit',cal:130,p:2.7,c:28,f:0.3},{name:'Riz complet cuit',cal:123,p:2.7,c:26,f:1},{name:'Pâtes cuites',cal:131,p:5,c:25,f:1.1},{name:'Pain complet',cal:247,p:13,c:41,f:3.4},{name:'Pain blanc',cal:265,p:9,c:49,f:3.2},{name:'Avoine (flocons)',cal:389,p:17,c:66,f:7},{name:'Quinoa cuit',cal:120,p:4.4,c:21,f:1.9},{name:'Patate douce',cal:86,p:1.6,c:20,f:0.1},{name:'Pomme de terre',cal:77,p:2,c:17,f:0.1},{name:'Semoule cuite',cal:112,p:3.6,c:23,f:0.2},
+{name:'Boulgour cuit',cal:83,p:3.1,c:18,f:0.2},{name:'Lentilles cuites',cal:116,p:9,c:20,f:0.4},{name:'Pois chiches cuits',cal:164,p:8.9,c:27,f:2.6},{name:'Haricots rouges',cal:127,p:8.7,c:23,f:0.5},{name:'Maïs',cal:86,p:3.3,c:19,f:1.2},
+{name:'Brocoli',cal:34,p:2.8,c:7,f:0.4},{name:'Épinards',cal:23,p:2.9,c:3.6,f:0.4},{name:'Haricots verts',cal:31,p:1.8,c:7,f:0.1},{name:'Courgette',cal:17,p:1.2,c:3.1,f:0.3},{name:'Tomate',cal:18,p:0.9,c:3.9,f:0.2},{name:'Carotte',cal:41,p:0.9,c:10,f:0.2},{name:'Concombre',cal:15,p:0.7,c:3.6,f:0.1},{name:'Poivron',cal:31,p:1,c:6,f:0.3},{name:'Aubergine',cal:25,p:1,c:6,f:0.2},{name:'Chou-fleur',cal:25,p:1.9,c:5,f:0.3},
+{name:'Salade verte',cal:15,p:1.4,c:2.9,f:0.2},{name:'Champignons',cal:22,p:3.1,c:3.3,f:0.3},{name:'Oignon',cal:40,p:1.1,c:9,f:0.1},{name:'Asperges',cal:20,p:2.2,c:3.9,f:0.1},{name:'Petits pois',cal:81,p:5.4,c:14,f:0.4},
+{name:'Banane',cal:89,p:1.1,c:23,f:0.3},{name:'Pomme',cal:52,p:0.3,c:14,f:0.2},{name:'Orange',cal:47,p:0.9,c:12,f:0.1},{name:'Fraises',cal:32,p:0.7,c:7.7,f:0.3},{name:'Myrtilles',cal:57,p:0.7,c:14,f:0.3},{name:'Raisin',cal:69,p:0.7,c:18,f:0.2},{name:'Mangue',cal:60,p:0.8,c:15,f:0.4},{name:'Ananas',cal:50,p:0.5,c:13,f:0.1},{name:'Kiwi',cal:61,p:1.1,c:15,f:0.5},{name:'Poire',cal:57,p:0.4,c:15,f:0.1},
+{name:'Melon',cal:34,p:0.8,c:8.2,f:0.2},{name:'Pastèque',cal:30,p:0.6,c:7.6,f:0.2},{name:'Abricot',cal:48,p:1.4,c:11,f:0.4},{name:'Pêche',cal:39,p:0.9,c:10,f:0.3},{name:'Cerise',cal:63,p:1.1,c:16,f:0.2},
+{name:'Lait demi-écrémé',cal:46,p:3.3,c:4.8,f:1.6},{name:'Fromage blanc 0%',cal:48,p:8,c:4,f:0.1},{name:'Fromage blanc 3%',cal:73,p:7,c:4,f:3},{name:'Yaourt nature',cal:61,p:5,c:4.7,f:2.6},{name:'Skyr',cal:63,p:11,c:4,f:0.2},{name:'Comté',cal:418,p:28,c:0.5,f:34},{name:'Emmental',cal:379,p:29,c:0.3,f:29},{name:'Mozzarella',cal:280,p:28,c:3.1,f:17},{name:'Beurre',cal:717,p:0.9,c:0.1,f:81},{name:'Crème fraîche 15%',cal:162,p:2.5,c:3.5,f:15},
+{name:'Huile d\'olive',cal:884,p:0,c:0,f:100},{name:'Huile de coco',cal:862,p:0,c:0,f:100},{name:'Beurre de cacahuète',cal:588,p:25,c:20,f:50},{name:'Amandes',cal:579,p:21,c:22,f:50},{name:'Noix',cal:654,p:15,c:14,f:65},{name:'Noix de cajou',cal:553,p:18,c:30,f:44},{name:'Graines de chia',cal:486,p:17,c:42,f:31},{name:'Graines de tournesol',cal:584,p:21,c:20,f:51},{name:'Graines de lin',cal:534,p:18,c:29,f:42},{name:'Chocolat noir 70%',cal:598,p:8,c:46,f:43},
+{name:'Whey protéine',cal:400,p:80,c:8,f:6},{name:'Caséine',cal:370,p:75,c:10,f:4},{name:'Créatine',cal:0,p:0,c:0,f:0},{name:'Protéine végétale',cal:380,p:70,c:15,f:5},{name:'Barre protéinée',cal:350,p:30,c:35,f:12},
+{name:'Miel',cal:304,p:0.3,c:82,f:0},{name:'Confiture',cal:250,p:0.4,c:63,f:0.1},{name:'Sucre blanc',cal:387,p:0,c:100,f:0},{name:'Sirop d\'érable',cal:260,p:0,c:67,f:0},
+{name:'Tofu',cal:76,p:8,c:1.9,f:4.8},{name:'Tempeh',cal:192,p:20,c:8,f:11},{name:'Seitan',cal:370,p:75,c:14,f:2},
+{name:'Saucisse',cal:301,p:12,c:2,f:27},{name:'Bacon',cal:541,p:37,c:1.4,f:42},{name:'Nuggets poulet',cal:296,p:15,c:18,f:19},{name:'Pizza margherita',cal:266,p:11,c:33,f:10},{name:'Frites',cal:312,p:3.4,c:41,f:15},{name:'Hamburger',cal:295,p:17,c:24,f:14},
+{name:'Croissant',cal:406,p:8,c:45,f:21},{name:'Baguette',cal:274,p:10,c:56,f:1.6},{name:'Galette de riz',cal:387,p:8,c:82,f:3},{name:'Wrap/Tortilla',cal:312,p:8,c:52,f:8},
+{name:'Houmous',cal:166,p:8,c:14,f:10},{name:'Guacamole',cal:160,p:2,c:9,f:15},{name:'Avocat',cal:160,p:2,c:9,f:15},{name:'Olives',cal:115,p:0.8,c:6,f:11},
+{name:'Dattes',cal:277,p:1.8,c:75,f:0.2},{name:'Figues sèches',cal:249,p:3.3,c:64,f:1},{name:'Raisins secs',cal:299,p:3.1,c:79,f:0.5},
+{name:'Lait d\'amande',cal:17,p:0.6,c:0.6,f:1.1},{name:'Lait de soja',cal:33,p:3.3,c:1.2,f:1.8},{name:'Lait d\'avoine',cal:48,p:1,c:8,f:1.5},
+{name:'Couscous cuit',cal:112,p:3.8,c:23,f:0.2},{name:'Gnocchi',cal:133,p:3,c:27,f:1},{name:'Riz basmati cuit',cal:121,p:3.5,c:25,f:0.4},
+{name:'Thé vert',cal:1,p:0,c:0.2,f:0},{name:'Café noir',cal:2,p:0.3,c:0,f:0},{name:'Jus d\'orange',cal:45,p:0.7,c:10,f:0.2},{name:'Coca-Cola',cal:42,p:0,c:11,f:0},
+{name:'Crêpe nature',cal:227,p:6,c:28,f:10},{name:'Pancake',cal:227,p:6,c:28,f:10},{name:'Granola',cal:471,p:10,c:62,f:20},{name:'Muesli',cal:340,p:10,c:60,f:6},
+{name:'Cottage cheese',cal:98,p:11,c:3.4,f:4.3},{name:'Ricotta',cal:174,p:11,c:3,f:13},{name:'Parmesan',cal:431,p:38,c:4,f:29},
+{name:'Edamame',cal:122,p:12,c:9,f:5},{name:'Fèves cuites',cal:110,p:7.6,c:19,f:0.4},{name:'Pois cassés cuits',cal:118,p:8.3,c:21,f:0.4},
+{name:'Sardines à l\'huile',cal:220,p:22,c:0,f:14},{name:'Maquereau',cal:205,p:19,c:0,f:14},{name:'Truite',cal:141,p:20,c:0,f:6.6},
+{name:'Bresaola',cal:151,p:32,c:0,f:2.6},{name:'Viande des Grisons',cal:153,p:37,c:0.5,f:1.5},{name:'Foie de poulet',cal:172,p:26,c:1,f:6.5},
+{name:'Sauce tomate',cal:24,p:1,c:4,f:0.5},{name:'Sauce soja',cal:53,p:5,c:5,f:0.6},{name:'Vinaigre balsamique',cal:88,p:0.5,c:17,f:0},
+{name:'Pop-corn nature',cal:375,p:12,c:74,f:4},{name:'Fruits secs mélangés',cal:520,p:15,c:25,f:45}
+];
+
+/* =========================================
+   CONSTANTS: SAGAS, QUOTES, MUSCLES
+   ========================================= */
+const SAGAS=[
+  {id:'saiyan',name:'Saga Saiyan',level:'Débutant',weeks:4,split:'Full Body 3x/sem',villainKey:'vegeta',desc:'Forgez vos bases comme un guerrier Saiyan',color:'#FFD700'},
+  {id:'namek',name:'Saga Namek',level:'Intermédiaire',weeks:6,split:'PPL 4x/sem',villainKey:'frieza',desc:'Augmentez votre puissance sur Namek',color:'#9B59B6'},
+  {id:'cell',name:'Saga Cell',level:'Avancé',weeks:8,split:'Arnold Split 5x/sem',villainKey:'cell',desc:'Dépassez vos limites dans la Salle',color:'#32CD32'},
+  {id:'buu',name:'Saga Buu',level:'Expert',weeks:10,split:'PHAT 5x/sem',villainKey:'buu',desc:'Atteignez le niveau légendaire',color:'#FF4C6A'},
+  {id:'tournament',name:'Tournoi du Pouvoir',level:'Élite',weeks:12,split:'Périodisation 6x/sem',villainKey:'beerus',desc:"L'entraînement ultime des dieux",color:'#00BFFF'}
+];
+
+const QUOTES=[
+  {text:"Je ne suis pas un héros. Je suis juste un gars qui ne supporte pas de perdre.",author:"Goku",img:'goku_base'},
+  {text:"Je suis le prince de tous les Saiyans ! Je ne perdrai jamais face à un rang inférieur !",author:"Vegeta",img:'vegeta'},
+  {text:"Le pouvoir vient en réponse à un besoin, pas à un désir.",author:"Goku",img:'goku_ssj'},
+  {text:"Chaque guerrier a ses limites. Mais un vrai guerrier les repousse chaque jour.",author:"Piccolo",img:'piccolo'},
+  {text:"La douleur de l'entraînement d'aujourd'hui est la puissance de demain.",author:"Vegeta",img:'vegeta'},
+  {text:"Tu vois, quand tu te bats pour les autres, tu es bien plus fort.",author:"Goku",img:'goku_base'},
+  {text:"Ne sois pas si pressé de mourir. La route vers la puissance est longue.",author:"Whis",img:'whis'},
+  {text:"La vraie force ne vient pas de la colère, mais de la sérénité.",author:"Gohan",img:'gohan'},
+  {text:"Plus tu reçois de coups, plus tu deviens fort. C'est la loi des Saiyans.",author:"Vegeta",img:'vegeta'},
+  {text:"Je m'entraînerai jusqu'à dépasser mes propres limites !",author:"Goku",img:'goku_ssj'},
+  {text:"Le talent sans travail n'est rien face au travail acharné.",author:"Piccolo",img:'piccolo'},
+  {text:"Si tu veux devenir fort, il faut d'abord accepter ta faiblesse.",author:"Whis",img:'whis'}
+];
+
+const MUSCLES_ALL=['Pectoraux','Dos','Épaules','Biceps','Triceps','Jambes','Abdos','Cardio'];
+
+/* =========================================
+   HELPERS
+   ========================================= */
+const today=()=>new Date().toISOString().split('T')[0];
+const weekStart=()=>{const d=new Date();d.setDate(d.getDate()-d.getDay()+1);return d.toISOString().split('T')[0]};
+const load=(k,d)=>{try{const v=localStorage.getItem('sf3_'+k);return v?JSON.parse(v):d}catch(e){return d}};
+const save=(k,v)=>{try{localStorage.setItem('sf3_'+k,JSON.stringify(v))}catch(e){}};
+const fmt=n=>n.toLocaleString('fr-FR');
+
+function calcPL(d){
+  const vol=d.workouts.reduce((s,w)=>s+w.sets.reduce((a,st)=>a+(st.weight||0)*(st.reps||0),0),0);
+  return Math.floor(vol+(d.profile.streak||0)*50+(Object.keys(d.prs||{}).length)*200+d.workouts.length*100);
+}
+
+function getTransform(pl){
+  if(pl<=1000)return{name:'Humain',imgKey:'krillin',aura:'',color:'#888'};
+  if(pl<=5000)return{name:'Saiyan',imgKey:'goku_base',aura:'aura-white',color:'#ffffff'};
+  if(pl<=15000)return{name:'Super Saiyan',imgKey:'goku_ssj',aura:'aura-yellow',color:'#FFD700'};
+  if(pl<=50000)return{name:'Super Saiyan 2',imgKey:'gohan',aura:'aura-yellow lightning-effect',color:'#FFD700'};
+  if(pl<=100000)return{name:'Super Saiyan 3',imgKey:'goku_ssj',aura:'aura-yellow',color:'#FFA500'};
+  if(pl<=500000)return{name:'Super Saiyan God',imgKey:'vegeta_blue',aura:'aura-pink',color:'#FF4C6A'};
+  return{name:'Super Saiyan Blue',imgKey:'goku_blue',aura:'aura-blue',color:'#00BFFF'};
+}
+
+/* =========================================
+   LOGO SVG COMPONENT
+   ========================================= */
+function Logo({size=40}){
+  return html`<svg width=${size} height=${size} viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="ballGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#FFA500"/>
+        <stop offset="100%" stop-color="#FF6B00"/>
+      </linearGradient>
+      <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#FFD700"/>
+        <stop offset="100%" stop-color="#FF8C00"/>
+      </linearGradient>
+    </defs>
+    <!-- Dragon Ball -->
+    <circle cx="50" cy="42" r="28" fill="url(#ballGrad)" stroke="#FFD700" stroke-width="2"/>
+    <circle cx="50" cy="42" r="22" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+    <!-- Stars -->
+    <circle cx="50" cy="34" r="3.5" fill="#8B0000"/><circle cx="42" cy="44" r="3" fill="#8B0000"/><circle cx="58" cy="44" r="3" fill="#8B0000"/><circle cx="50" cy="50" r="2.5" fill="#8B0000"/>
+    <!-- Shine -->
+    <ellipse cx="40" cy="32" rx="6" ry="4" fill="rgba(255,255,255,0.25)" transform="rotate(-30 40 32)"/>
+    <!-- Dumbbell -->
+    <rect x="20" y="76" width="60" height="5" rx="2.5" fill="url(#goldGrad)"/>
+    <rect x="14" y="70" width="14" height="17" rx="3" fill="url(#goldGrad)"/><rect x="72" y="70" width="14" height="17" rx="3" fill="url(#goldGrad)"/>
+  </svg>`;
+}
+
+/* =========================================
+   SHARED COMPONENTS
+   ========================================= */
+/* Robust image component with skeleton loading + colored badge fallback */
+function CharImg({src,alt,className,style,charKey}){
+  const[status,setStatus]=useState('loading');
+  const meta=charKey&&CHAR_META[charKey]?CHAR_META[charKey]:{name:alt||'?',color:'#FFD700',initials:(alt||'??').substring(0,2).toUpperCase()};
+  /* 10s timeout fallback for very slow connections */
+  const timerRef=useRef(null);
+  useEffect(()=>{
+    timerRef.current=setTimeout(()=>setStatus(s=>s==='loading'?'error':s),10000);
+    return()=>clearTimeout(timerRef.current);
+  },[]);
+  return html`<div class="relative ${className||''}" style=${style}>
+    ${status==='loading' && html`<div class="absolute inset-0 flex items-center justify-center">
+      <div class="w-3/4 h-3/4 rounded-full skeleton"/>
+    </div>`}
+    ${status==='error' && html`<div class="absolute inset-0 flex items-center justify-center">
+      <div class="w-full h-full rounded-full flex flex-col items-center justify-center" style=${{background:'linear-gradient(135deg,'+meta.color+'33,'+meta.color+'11)',border:'2px solid '+meta.color+'44'}}>
+        <span class="font-display text-lg" style=${{color:meta.color}}>${meta.initials}</span>
+        <span class="text-[8px] text-gray-400 font-body mt-0.5">${meta.name}</span>
+      </div>
+    </div>`}
+    <img src=${src} alt=${alt||meta.name}
+      class="char-img w-full h-full object-contain ${status==='loaded'?'opacity-100':'opacity-0'} transition-opacity duration-300"
+      loading="lazy" referrerpolicy="no-referrer"
+      onLoad=${()=>{clearTimeout(timerRef.current);setStatus('loaded')}}
+      onError=${()=>{clearTimeout(timerRef.current);setStatus('error')}}/>
+  </div>`;
+}
+
+function PowerCounter({value,className}){
+  const[disp,setDisp]=useState(0);
+  const ref=useRef(null);
+  useEffect(()=>{
+    let s=disp,e=value,dur=1000,t0=performance.now();
+    function tick(now){
+      const p=Math.min((now-t0)/dur,1);
+      const ease=1-Math.pow(1-p,3);
+      setDisp(Math.floor(s+ease*(e-s)));
+      if(p<1)ref.current=requestAnimationFrame(tick);
+    }
+    ref.current=requestAnimationFrame(tick);
+    return()=>cancelAnimationFrame(ref.current);
+  },[value]);
+  return html`<span class=${className||''}>${fmt(disp)}</span>`;
+}
+
+/* =========================================
+   DEFAULT STATE
+   ========================================= */
+const INIT={
+  profile:{name:'Guerrier',avatar:'goku_base',calGoal:2500,pTarget:150,cTarget:300,fTarget:80,streak:0,lastWorkoutDate:'',theme:'dark',units:'kg'},
+  workouts:[],prs:{},nutrition:{},waterLog:{},badges:[]
+};
+
+/* =========================================
+   APP
+   ========================================= */
+function App(){
+  const[tab,setTab]=useState(0);
+  const[data,setRaw]=useState(()=>{const s=load('data',null);return s?{...INIT,...s}:INIT});
+  const[prFlash,setPrFlash]=useState(null);
+  const[online,setOnline]=useState(navigator.onLine);
+  const touchRef=useRef({x:0,y:0});
+
+  const set=useCallback(fn=>{
+    setRaw(prev=>{const next=typeof fn==='function'?fn(prev):{...prev,...fn};save('data',next);return next});
+  },[]);
+
+  const pl=useMemo(()=>calcPL(data),[data]);
+  const tf=useMemo(()=>getTransform(pl),[pl]);
+
+  const firePR=useCallback(msg=>{setPrFlash(msg);setTimeout(()=>setPrFlash(null),2200)},[]);
+
+  // Online/offline
+  useEffect(()=>{
+    const on=()=>setOnline(true),off=()=>setOnline(false);
+    window.addEventListener('online',on);window.addEventListener('offline',off);
+    return()=>{window.removeEventListener('online',on);window.removeEventListener('offline',off)};
+  },[]);
+
+  // Streak check
+  useEffect(()=>{
+    const t=today(),y=new Date(Date.now()-864e5).toISOString().split('T')[0];
+    if(data.profile.lastWorkoutDate&&data.profile.lastWorkoutDate!==t&&data.profile.lastWorkoutDate!==y){
+      set(d=>({...d,profile:{...d.profile,streak:0}}));
+    }
+  },[]);
+
+  // Swipe between tabs
+  const onTouchStart=useCallback(e=>{touchRef.current={x:e.touches[0].clientX,y:e.touches[0].clientY}},[]);
+  const onTouchEnd=useCallback(e=>{
+    const dx=e.changedTouches[0].clientX-touchRef.current.x;
+    const dy=e.changedTouches[0].clientY-touchRef.current.y;
+    if(Math.abs(dx)>80&&Math.abs(dy)<60){
+      if(dx<0&&tab<4)setTab(t=>t+1);
+      if(dx>0&&tab>0)setTab(t=>t-1);
+    }
+  },[tab]);
+
+  const pages=[
+    html`<${HomePage} data=${data} set=${set} pl=${pl} tf=${tf} setTab=${setTab}/>`,
+    html`<${TrainingPage} data=${data} set=${set} firePR=${firePR}/>`,
+    html`<${StatsPage} data=${data} pl=${pl} tf=${tf}/>`,
+    html`<${NutritionPage} data=${data} set=${set}/>`,
+    html`<${ProfilePage} data=${data} set=${set} pl=${pl} tf=${tf}/>`
+  ];
+
+  return html`<div class="min-h-screen relative" onTouchStart=${onTouchStart} onTouchEnd=${onTouchEnd}>
+    <!-- Offline banner -->
+    ${!online && html`<div class="fixed top-0 left-0 right-0 z-50 bg-red-500/90 text-white text-xs text-center py-1 font-body" style=${{paddingTop:'max(4px,var(--safe-top))'}}>Hors ligne — données sauvegardées localement</div>`}
+
+    <!-- PR Flash -->
+    ${prFlash && html`<div class="fixed inset-0 z-50 pointer-events-none flex items-center justify-center" style=${{animation:'shake 0.5s ease'}}>
+      <div class="absolute inset-0 bg-ki-gold/15" style=${{animation:'flash-gold 1s ease-out forwards'}}/>
+      <div class="text-center z-10 px-6">
+        <div class="font-display text-4xl sm:text-5xl text-ki-gold mb-3" style=${{textShadow:'0 0 40px rgba(255,215,0,0.6)'}}>POWER UP!</div>
+        <div class="font-body text-lg text-white/90">${prFlash}</div>
+      </div>
+    </div>`}
+
+    <!-- Page content -->
+    <div class="page-enter pb-24" key=${tab}>${pages[tab]}</div>
+
+    <!-- Bottom Nav -->
+    <${BottomNav} tab=${tab} setTab=${setTab}/>
+  </div>`;
+}
+
+/* =========================================
+   BOTTOM NAV
+   ========================================= */
+const BottomNav=memo(function BottomNav({tab,setTab}){
+  const tabs=[
+    {icon:'🏠',label:'Gravité',activeColor:'#FFD700'},
+    {icon:'💪',label:'Training',activeColor:'#FF8C00'},
+    {icon:'📊',label:'Scouter',activeColor:'#00FF88'},
+    {icon:'🍽️',label:'Senzu',activeColor:'#32CD32'},
+    {icon:'👤',label:'Capsule',activeColor:'#00BFFF'}
+  ];
+  return html`<nav class="nav-glass fixed bottom-0 left-0 right-0 z-40 gpu" style=${{paddingBottom:'max(6px, var(--safe-bottom))'}}>
+    <div class="flex justify-around items-center h-16 max-w-lg mx-auto px-2">
+      ${tabs.map((t,i)=>html`<button key=${i} onClick=${()=>setTab(i)} class="touch-btn flex flex-col items-center gap-0.5 flex-1 relative py-2" aria-label=${t.label}>
+        <span class="text-xl transition-transform duration-150 ${tab===i?'scale-110':''}">${t.icon}</span>
+        <span class="text-[10px] font-body font-medium transition-colors duration-150" style=${{color:tab===i?t.activeColor:'#666'}}>${t.label}</span>
+        ${tab===i && html`<div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-6 h-[3px] rounded-full" style=${{background:t.activeColor,animation:'nav-indicator 0.2s ease-out'}}/>`}
+      </button>`)}
+    </div>
+  </nav>`;
+});
+
+/* =========================================
+   PAGE 1: HOME
+   ========================================= */
+function HomePage({data,set,pl,tf,setTab}){
+  const[quote]=useState(()=>QUOTES[Math.floor(Math.random()*QUOTES.length)]);
+  const ww=useMemo(()=>{const ws=weekStart();return data.workouts.filter(w=>w.date>=ws)},[data.workouts]);
+  const wVol=useMemo(()=>ww.reduce((s,w)=>s+w.sets.reduce((a,st)=>a+(st.weight||0)*(st.reps||0),0),0),[ww]);
+  const wMuscles=useMemo(()=>{const m=new Set();ww.forEach(w=>w.sets.forEach(s=>{const ex=EXERCISES.find(e=>e.id===s.exerciseId);if(ex)m.add(ex.muscle)}));return m.size},[ww]);
+  const prCount=Object.keys(data.prs).length;
+  const dbCount=Math.min(prCount,7);
+
+  return html`<div class="page-bg-home min-h-screen">
+    <div class="px-4 max-w-lg mx-auto" style=${{paddingTop:'max(16px, calc(var(--safe-top) + 12px))'}}>
+
+      <!-- Header with Logo -->
+      <div class="flex items-center justify-between mb-5 fade-in">
+        <div class="flex items-center gap-3">
+          <${Logo} size=${36}/>
+          <div>
+            <div class="text-gray-400 text-xs font-body">Bienvenue,</div>
+            <div class="font-display text-2xl text-white tracking-wide">${data.profile.name}</div>
+          </div>
+        </div>
+        <div class="text-right card-glass px-3 py-2">
+          <div class="text-[9px] text-gray-400 font-body uppercase tracking-widest">Power Level</div>
+          <${PowerCounter} value=${pl} className="font-power text-lg text-ki-gold"/>
+        </div>
+      </div>
+
+      <!-- Transformation Card -->
+      <div class="card-glass card-glow p-5 mb-4 fade-in fade-1 relative overflow-hidden">
+        <div class="absolute -top-10 -right-10 w-40 h-40 rounded-full opacity-10" style=${{background:'radial-gradient(circle,'+tf.color+',transparent)'}}/>
+        <div class="flex items-center gap-5 relative z-10">
+          <div class="${tf.aura} w-28 h-28 rounded-full flex items-center justify-center shrink-0 relative">
+            <${CharImg} src=${IMG[tf.imgKey]} alt=${tf.name} className="w-24 h-24 float-anim" charKey=${tf.imgKey}/>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="text-[10px] text-gray-400 font-body uppercase tracking-wider mb-1">Transformation actuelle</div>
+            <div class="font-display text-2xl truncate" style=${{color:tf.color}}>${tf.name}</div>
+            <div class="mt-3 h-2.5 bg-white/8 rounded-full overflow-hidden">
+              <div class="h-full rounded-full transition-all duration-1000 ease-out" style=${{width:Math.min(100,(pl%100000)/1000)+'%',background:'linear-gradient(90deg,'+tf.color+',#FFD700)'}}/>
+            </div>
+            <div class="text-[10px] text-gray-500 mt-1.5 font-body">Prochain: <span style=${{color:getTransform(pl+50001).color}}>${getTransform(pl+50001).name}</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Streak -->
+      <div class="card-glass p-4 mb-4 flex items-center justify-between fade-in fade-2">
+        <div class="flex items-center gap-3">
+          <span class="text-2xl streak-fire">🔥</span>
+          <div>
+            <div class="font-body font-semibold text-white">${data.profile.streak} jours</div>
+            <div class="text-[10px] text-gray-400">Série d'entraînement</div>
+          </div>
+        </div>
+        <div class="flex gap-1.5">
+          ${[0,1,2,3,4,5,6].map(i=>html`<div key=${i} class="w-3.5 h-3.5 rounded-full transition-all duration-300" style=${{background:i<(data.profile.streak%7)?'#FFD700':'rgba(255,255,255,0.08)',boxShadow:i<(data.profile.streak%7)?'0 0 6px rgba(255,215,0,0.4)':'none'}}/>`)}
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <button onClick=${()=>setTab(1)} class="ki-btn w-full py-4 rounded-2xl font-display text-xl text-black mb-4 fade-in fade-3 tracking-wider">
+        COMMENCER L'ENTRAÎNEMENT
+      </button>
+
+      <!-- Quote -->
+      <div class="card-glass p-4 mb-4 fade-in fade-4 relative overflow-hidden">
+        <div class="absolute right-2 top-1/2 -translate-y-1/2 opacity-10 w-16 h-16">
+          <${CharImg} src=${IMG[quote.img]} alt=${quote.author} className="w-full h-full" charKey=${quote.img}/>
+        </div>
+        <div class="text-sm text-gray-200 italic font-body leading-relaxed pr-12">"${quote.text}"</div>
+        <div class="text-xs text-ki-gold mt-2 font-body font-medium">— ${quote.author}</div>
+      </div>
+
+      <!-- Week Summary -->
+      <div class="grid grid-cols-3 gap-3 mb-4 fade-in fade-5">
+        ${[{val:ww.length,label:'Séances',color:'#FFD700'},{val:fmt(Math.round(wVol)),label:'Volume (kg)',color:'#00BFFF'},{val:wMuscles,label:'Muscles',color:'#32CD32'}].map((s,i)=>html`<div key=${i} class="card-glass p-3 text-center">
+          <div class="font-power text-xl" style=${{color:s.color}}>${s.val}</div>
+          <div class="text-[10px] text-gray-400 font-body mt-0.5">${s.label}</div>
+        </div>`)}
+      </div>
+
+      <!-- Dragon Balls -->
+      <div class="card-glass p-4 mb-4 fade-in fade-6">
+        <div class="flex items-center justify-between mb-3">
+          <div class="font-body font-semibold text-white text-sm">Dragon Balls</div>
+          <div class="text-[10px] text-gray-400 font-body">${dbCount}/7 Records personnels</div>
+        </div>
+        <div class="flex justify-center gap-3.5">
+          ${[1,2,3,4,5,6,7].map(i=>html`<svg key=${i} width="34" height="34" viewBox="0 0 34 34" class=${i<=dbCount?'db-glow':''}>
+            <circle cx="17" cy="17" r="15" fill=${i<=dbCount?'#FF8C00':'rgba(255,255,255,0.04)'} stroke=${i<=dbCount?'#FFD700':'rgba(255,255,255,0.1)'} stroke-width="1.5"/>
+            ${i<=dbCount && html`<circle cx="17" cy="14" r="2.5" fill="#8B0000"/>`}
+            ${i<=dbCount && i>=2 && html`<circle cx="13" cy="20" r="2" fill="#8B0000"/>`}
+            ${i<=dbCount && i>=3 && html`<circle cx="21" cy="20" r="2" fill="#8B0000"/>`}
+            ${i<=dbCount && html`<ellipse cx="13" cy="12" rx="3" ry="2" fill="rgba(255,255,255,0.2)" transform="rotate(-25 13 12)"/>`}
+          </svg>`)}
+        </div>
+        ${dbCount>=7 && html`<div class="text-center mt-4">
+          <${CharImg} src=${IMG.shenron} alt="Shenron" className="w-20 h-20 mx-auto float-anim" charKey="shenron"/>
+          <div class="text-ki-gold font-display text-base mt-2 tracking-wide" style=${{textShadow:'0 0 15px rgba(255,215,0,0.4)'}}>SHENRON INVOQUÉ !</div>
+        </div>`}
+      </div>
+    </div>
+  </div>`;
+}
+
+/* =========================================
+   PAGE 2: TRAINING
+   ========================================= */
+function TrainingPage({data,set,firePR}){
+  const[view,setView]=useState('main');
+  const[selEx,setSelEx]=useState(null);
+  const[wSets,setWSets]=useState([]);
+  const[rest,setRest]=useState(0);
+  const[restT,setRestT]=useState(90);
+  const[search,setSearch]=useState('');
+  const[fMuscle,setFMuscle]=useState('');
+  const[tw,setTw]=useState('');
+  const[tr,setTr]=useState('');
+  const[flash,setFlash]=useState(-1);
+  const timerRef=useRef(null);
+
+  useEffect(()=>{if(rest>0){timerRef.current=setTimeout(()=>setRest(r=>r-1),1000);return()=>clearTimeout(timerRef.current)}},[rest]);
+
+  const startRest=(s)=>{setRestT(s);setRest(s)};
+
+  const filtered=useMemo(()=>{
+    let ex=EXERCISES;
+    if(fMuscle)ex=ex.filter(e=>e.muscle===fMuscle);
+    if(search)ex=ex.filter(e=>e.nameFr.toLowerCase().includes(search.toLowerCase()));
+    return ex;
+  },[search,fMuscle]);
+
+  const addSet=()=>{
+    const w=parseFloat(tw)||0,r=parseInt(tr)||0;
+    if(r<=0)return;
+    const key=selEx.id,cur=data.prs[key]||0;
+    let isPR=false;
+    if(w>cur){isPR=true;set(d=>({...d,prs:{...d.prs,[key]:w}}));firePR('NOUVEAU RECORD! '+selEx.nameFr+': '+w+'kg')}
+    const ns={exerciseId:selEx.id,weight:w,reps:r,date:today(),isPR};
+    setWSets(p=>[...p,ns]);
+    setFlash(wSets.length);setTimeout(()=>setFlash(-1),400);
+    setTw('');setTr('');startRest(90);
+  };
+
+  const finish=()=>{
+    if(wSets.length===0)return;
+    const t=today(),y=new Date(Date.now()-864e5).toISOString().split('T')[0];
+    const wo={date:t,sets:wSets};
+    set(d=>{
+      const streak=d.profile.lastWorkoutDate===t?d.profile.streak:(d.profile.lastWorkoutDate===y?d.profile.streak+1:1);
+      return{...d,workouts:[...d.workouts,wo],profile:{...d.profile,streak,lastWorkoutDate:t}};
+    });
+    setWSets([]);setView('summary');
+  };
+
+  const wVol=wSets.reduce((s,st)=>s+(st.weight||0)*(st.reps||0),0);
+  const restPct=restT>0?(restT-rest)/restT*100:0;
+  const restCirc=2*Math.PI*40;
+
+  // SUMMARY VIEW
+  if(view==='summary'){
+    return html`<div class="page-bg-train min-h-screen flex items-center justify-center px-4">
+      <div class="card-glass p-8 text-center max-w-sm w-full fade-in">
+        <${CharImg} src=${IMG.goku_ssj} alt="Victory" className="w-36 h-36 mx-auto mb-5 float-anim" charKey="goku_ssj"/>
+        <div class="font-display text-3xl text-ki-gold mb-2 tracking-wide" style=${{textShadow:'0 0 20px rgba(255,215,0,0.4)'}}>TERMINÉ !</div>
+        <div class="font-body text-gray-300 mb-6">Tu as repoussé tes limites, guerrier !</div>
+        <div class="grid grid-cols-2 gap-3 mb-6">
+          <div class="card-glass p-4"><div class="font-power text-2xl text-ki-gold">${wSets.length}</div><div class="text-xs text-gray-400">Séries</div></div>
+          <div class="card-glass p-4"><div class="font-power text-2xl text-ssj-blue">${fmt(Math.round(wVol))}</div><div class="text-xs text-gray-400">Volume (kg)</div></div>
+        </div>
+        <div class="text-sm text-gray-400 mb-5 font-body">Power Level: <span class="text-ki-gold font-power">+${fmt(Math.floor(wVol+wSets.length*10+100))}</span></div>
+        <button onClick=${()=>setView('main')} class="ki-btn py-3 px-8 rounded-xl font-display text-black text-lg w-full">RETOUR</button>
+      </div>
+    </div>`;
+  }
+
+  // WORKOUT VIEW
+  if(view==='workout'&&selEx){
+    const exSets=wSets.filter(s=>s.exerciseId===selEx.id);
+    const hist=data.workouts.flatMap(w=>w.sets).filter(s=>s.exerciseId===selEx.id).slice(-8);
+    return html`<div class="page-bg-train min-h-screen" style=${{paddingTop:'max(12px, calc(var(--safe-top) + 8px))'}}>
+      <div class="px-4 max-w-lg mx-auto">
+        <!-- Header -->
+        <div class="flex items-center gap-3 mb-4">
+          <button onClick=${()=>{setSelEx(null);setView('exercises')}} class="touch-btn w-11 h-11 rounded-xl bg-white/5 text-gray-300 text-lg">←</button>
+          <div class="flex-1 min-w-0">
+            <div class="font-display text-xl text-white truncate">${selEx.nameFr}</div>
+            <div class="text-xs text-gray-400 font-body">${selEx.muscle} · ${selEx.equipment}</div>
+          </div>
+          ${data.prs[selEx.id]?html`<div class="card-glass px-2.5 py-1.5"><div class="text-[9px] text-gray-400">PR</div><div class="font-power text-sm text-ki-gold">${data.prs[selEx.id]}kg</div></div>`:null}
+        </div>
+
+        <!-- Circular Rest Timer -->
+        ${rest>0 && html`<div class="card-glass p-4 mb-4 flex items-center gap-4">
+          <svg width="70" height="70" viewBox="0 0 90 90" class="shrink-0 -rotate-90">
+            <circle cx="45" cy="45" r="40" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="5"/>
+            <circle cx="45" cy="45" r="40" fill="none" stroke="url(#timerGrad)" stroke-width="5" stroke-linecap="round"
+              stroke-dasharray=${restCirc} stroke-dashoffset=${restCirc*(1-restPct/100)} style=${{transition:'stroke-dashoffset 1s linear'}}/>
+            <defs><linearGradient id="timerGrad"><stop offset="0%" stop-color="#FF8C00"/><stop offset="100%" stop-color="#FFD700"/></linearGradient></defs>
+          </svg>
+          <div>
+            <div class="font-power text-2xl text-ki-gold">${rest}s</div>
+            <div class="text-xs text-gray-400 font-body">Charge de Ki en cours...</div>
+          </div>
+          <button onClick=${()=>setRest(0)} class="touch-btn ml-auto bg-white/5 rounded-lg px-3 py-2 text-xs text-gray-300 font-body">Skip</button>
+        </div>`}
+
+        <!-- Input -->
+        <div class="card-glass p-4 mb-4">
+          <div class="flex gap-3 items-end">
+            <div class="flex-1">
+              <label class="text-[10px] text-gray-400 block mb-1.5 font-body">Poids (kg)</label>
+              <input type="number" inputmode="decimal" value=${tw} onInput=${e=>setTw(e.target.value)} placeholder="0"
+                class="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-3.5 text-center font-power text-xl text-white focus:border-ki-gold/60 focus:outline-none focus:ring-1 focus:ring-ki-gold/30 transition-all" style=${{minHeight:'52px'}}/>
+            </div>
+            <div class="flex-1">
+              <label class="text-[10px] text-gray-400 block mb-1.5 font-body">Reps</label>
+              <input type="number" inputmode="numeric" value=${tr} onInput=${e=>setTr(e.target.value)} placeholder="0"
+                class="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-3.5 text-center font-power text-xl text-white focus:border-ki-gold/60 focus:outline-none focus:ring-1 focus:ring-ki-gold/30 transition-all" style=${{minHeight:'52px'}}/>
+            </div>
+            <button onClick=${addSet} class="touch-btn bg-green-500 hover:bg-green-400 w-14 h-14 rounded-xl text-2xl text-white font-bold transition-colors" style=${{minHeight:'52px'}}>✓</button>
+          </div>
+        </div>
+
+        <!-- Current Sets -->
+        ${exSets.length>0 && html`<div class="card-glass p-4 mb-4">
+          <div class="text-[10px] text-gray-400 mb-2 font-body uppercase tracking-wider">Séries aujourd'hui</div>
+          ${exSets.map((s,i)=>html`<div key=${i} class="flex items-center justify-between py-2.5 border-b border-white/5 last:border-0 rounded transition-colors duration-300 ${flash===i?'bg-green-500/15':''}">
+            <span class="text-sm text-gray-300 font-body">Série ${i+1}</span>
+            <div class="flex items-center gap-2">
+              <span class="font-power text-sm ${s.isPR?'text-ki-gold':'text-white'}">${s.weight}kg × ${s.reps}</span>
+              ${s.isPR && html`<span class="text-ki-gold text-sm">⭐</span>`}
+            </div>
+          </div>`)}
+        </div>`}
+
+        <!-- Rest quick buttons -->
+        <div class="flex gap-2 mb-4">
+          ${[60,90,120,180].map(s=>html`<button key=${s} onClick=${()=>startRest(s)} class="touch-btn flex-1 py-2.5 rounded-xl bg-white/5 text-xs text-gray-300 font-body border border-white/5 active:bg-white/10 transition-all">${s}s</button>`)}
+        </div>
+
+        <!-- History -->
+        ${hist.length>0 && html`<div class="card-glass p-4 mb-4">
+          <div class="text-[10px] text-gray-400 mb-2 font-body uppercase tracking-wider">Historique</div>
+          ${hist.slice(-5).reverse().map((s,i)=>html`<div key=${i} class="flex justify-between py-1.5 text-xs">
+            <span class="text-gray-500 font-body">${s.date}</span>
+            <span class="text-gray-300 font-power">${s.weight}kg × ${s.reps}</span>
+          </div>`)}
+        </div>`}
+
+        <!-- Actions -->
+        <div class="flex gap-3 mb-4">
+          <button onClick=${()=>{setSelEx(null);setView('exercises')}} class="touch-btn flex-1 py-3.5 rounded-xl bg-white/5 border border-white/10 font-body text-white text-sm">+ Exercice</button>
+          <button onClick=${finish} class="ki-btn flex-1 py-3.5 rounded-xl font-display text-black text-sm tracking-wider">TERMINER</button>
+        </div>
+
+        <!-- Summary bar -->
+        ${wSets.length>0 && html`<div class="card-glass p-3 flex items-center justify-between">
+          <span class="text-xs text-gray-400 font-body">Total: <span class="text-white font-power">${wSets.length} séries</span></span>
+          <span class="text-xs text-gray-400 font-body">Volume: <span class="text-ki-gold font-power">${fmt(Math.round(wVol))} kg</span></span>
+        </div>`}
+      </div>
+    </div>`;
+  }
+
+  // EXERCISE LIST
+  if(view==='exercises'){
+    return html`<div class="page-bg-train min-h-screen" style=${{paddingTop:'max(12px, calc(var(--safe-top) + 8px))'}}>
+      <div class="px-4 max-w-lg mx-auto">
+        <div class="flex items-center gap-3 mb-4">
+          <button onClick=${()=>setView('main')} class="touch-btn w-11 h-11 rounded-xl bg-white/5 text-gray-300 text-lg">←</button>
+          <div class="font-display text-xl text-white">Exercices <span class="text-gray-500 text-base">(${EXERCISES.length})</span></div>
+        </div>
+        <input type="text" placeholder="Rechercher un exercice..." value=${search} onInput=${e=>setSearch(e.target.value)}
+          class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3.5 text-white font-body mb-3 focus:border-ki-gold/60 focus:outline-none transition-all" style=${{minHeight:'48px'}}/>
+        <div class="flex gap-2 overflow-x-auto hide-scroll mb-4 pb-1 scroll-snap">
+          <button onClick=${()=>setFMuscle('')} class="touch-btn shrink-0 px-4 py-2 rounded-full text-xs font-body font-medium transition-all ${!fMuscle?'bg-ki-gold text-black':'bg-white/5 text-gray-300 border border-white/5'}">Tout</button>
+          ${MUSCLES_ALL.map(m=>html`<button key=${m} onClick=${()=>setFMuscle(f=>f===m?'':m)} class="touch-btn shrink-0 px-4 py-2 rounded-full text-xs font-body font-medium transition-all ${fMuscle===m?'bg-ki-gold text-black':'bg-white/5 text-gray-300 border border-white/5'}">${m}</button>`)}
+        </div>
+        <div class="space-y-2 smooth-scroll" style=${{maxHeight:'calc(100vh - 200px)',overflowY:'auto'}}>
+          ${filtered.map(ex=>html`<button key=${ex.id} onClick=${()=>{setSelEx(ex);setView('workout')}} class="w-full card-glass p-3.5 flex items-center justify-between touch-btn rounded-2xl">
+            <div class="text-left min-w-0 flex-1">
+              <div class="font-body text-sm text-white font-medium">${ex.nameFr}</div>
+              <div class="text-[10px] text-gray-400 mt-0.5">${ex.muscle} · ${ex.equipment}</div>
+            </div>
+            <div class="flex gap-1 ml-3 shrink-0">
+              ${[1,2,3].map(d=>html`<div key=${d} class="w-2 h-2 rounded-full transition-colors" style=${{background:d<=ex.difficulty?'#FFD700':'rgba(255,255,255,0.08)'}}/>`)}
+            </div>
+          </button>`)}
+        </div>
+      </div>
+    </div>`;
+  }
+
+  // MAIN TRAINING VIEW
+  return html`<div class="page-bg-train min-h-screen" style=${{paddingTop:'max(12px, calc(var(--safe-top) + 8px))'}}>
+    <div class="px-4 max-w-lg mx-auto">
+      <div class="font-display text-2xl text-white mb-5 fade-in tracking-wide">Salle de l'Esprit et du Temps</div>
+
+      <!-- Saga Programs -->
+      <div class="mb-5 fade-in fade-1">
+        <div class="text-xs text-gray-400 font-body mb-3 uppercase tracking-wider">Programmes Saga</div>
+        <div class="flex gap-3 overflow-x-auto hide-scroll pb-2 scroll-snap">
+          ${SAGAS.map(s=>html`<div key=${s.id} class="shrink-0 w-48 card-glass p-4 relative overflow-hidden" style=${{borderColor:s.color+'20'}}>
+            <div class="absolute -right-3 -bottom-3 w-24 h-24 opacity-20">
+              <${CharImg} src=${IMG[s.villainKey]} alt=${s.name} className="w-full h-full" charKey=${s.villainKey}/>
+            </div>
+            <div class="relative z-10">
+              <div class="text-[10px] font-body font-semibold uppercase tracking-wider" style=${{color:s.color}}>${s.level}</div>
+              <div class="font-display text-base text-white mt-1">${s.name}</div>
+              <div class="text-[10px] text-gray-400 mt-1 font-body">${s.weeks} sem · ${s.split}</div>
+              <div class="text-[10px] text-gray-500 mt-1.5 font-body leading-snug">${s.desc}</div>
+            </div>
+          </div>`)}
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <button onClick=${()=>setView('exercises')} class="ki-btn w-full py-4 rounded-2xl font-display text-xl text-black mb-4 fade-in fade-2 tracking-wider">
+        CHOISIR UN EXERCICE
+      </button>
+
+      <!-- Active workout -->
+      ${wSets.length>0 && html`<div class="card-glass card-glow p-4 mb-4 fade-in">
+        <div class="flex items-center justify-between">
+          <div>
+            <div class="font-body font-semibold text-white text-sm">Workout en cours</div>
+            <div class="text-xs text-gray-400 font-body">${wSets.length} séries · ${fmt(Math.round(wVol))} kg</div>
+          </div>
+          <div class="flex gap-2">
+            <button onClick=${()=>setView('exercises')} class="touch-btn px-4 py-2.5 bg-white/8 rounded-xl text-xs text-white font-body">Continuer</button>
+            <button onClick=${finish} class="touch-btn px-4 py-2.5 bg-green-500 rounded-xl text-xs text-black font-body font-semibold">Terminer</button>
+          </div>
+        </div>
+      </div>`}
+
+      <!-- Recent -->
+      <div class="fade-in fade-3">
+        <div class="text-xs text-gray-400 font-body mb-3 uppercase tracking-wider">Dernières séances</div>
+        ${data.workouts.length===0?html`<div class="card-glass p-8 text-center">
+          <${CharImg} src=${IMG.goku_base} alt="Start" className="w-24 h-24 mx-auto mb-3 opacity-30" charKey="goku_base"/>
+          <div class="text-sm text-gray-400 font-body">Aucune séance enregistrée</div>
+          <div class="text-xs text-gray-500 font-body mt-1">Commence ton premier entraînement !</div>
+        </div>`:data.workouts.slice(-5).reverse().map((w,i)=>{
+          const vol=w.sets.reduce((s,st)=>s+(st.weight||0)*(st.reps||0),0);
+          const m=new Set(w.sets.map(s=>{const ex=EXERCISES.find(e=>e.id===s.exerciseId);return ex?ex.muscle:''}));
+          return html`<div key=${i} class="card-glass p-3.5 mb-2 flex items-center justify-between">
+            <div><div class="text-sm text-white font-body">${w.date}</div><div class="text-[10px] text-gray-400 mt-0.5">${[...m].filter(Boolean).join(', ')}</div></div>
+            <div class="text-right"><div class="font-power text-sm text-ki-gold">${fmt(Math.round(vol))} kg</div><div class="text-[10px] text-gray-400">${w.sets.length} séries</div></div>
+          </div>`;
+        })}
+      </div>
+    </div>
+  </div>`;
+}
+
+/* =========================================
+   PAGE 3: STATS
+   ========================================= */
+function StatsPage({data,pl,tf}){
+  const totalVol=data.workouts.reduce((s,w)=>s+w.sets.reduce((a,st)=>a+(st.weight||0)*(st.reps||0),0),0);
+  const ww=useMemo(()=>{const ws=weekStart();return data.workouts.filter(w=>w.date>=ws)},[data.workouts]);
+  const wVol=ww.reduce((s,w)=>s+w.sets.reduce((a,st)=>a+(st.weight||0)*(st.reps||0),0),0);
+
+  const muscleVol=useMemo(()=>{
+    const mv={};
+    data.workouts.forEach(w=>w.sets.forEach(s=>{const ex=EXERCISES.find(e=>e.id===s.exerciseId);if(ex)mv[ex.muscle]=(mv[ex.muscle]||0)+(s.weight||0)*(s.reps||0)}));
+    return mv;
+  },[data.workouts]);
+  const maxMV=Math.max(...Object.values(muscleVol),1);
+
+  const chartData=useMemo(()=>data.workouts.slice(-12).map((w,i)=>({name:'S'+(i+1),vol:Math.round(w.sets.reduce((a,st)=>a+(st.weight||0)*(st.reps||0),0))})),[data.workouts]);
+
+  const prList=Object.entries(data.prs).map(([id,w])=>{const ex=EXERCISES.find(e=>e.id===id);return{name:ex?ex.nameFr:id,weight:w,muscle:ex?ex.muscle:''}}).sort((a,b)=>b.weight-a.weight);
+
+  const scoCirc=2*Math.PI*52;
+
+  return html`<div class="page-bg-stats min-h-screen" style=${{paddingTop:'max(12px, calc(var(--safe-top) + 8px))'}}>
+    <div class="px-4 max-w-lg mx-auto">
+      <div class="font-display text-2xl text-white mb-5 fade-in tracking-wide">Scouter</div>
+
+      <!-- Scouter Circle -->
+      <div class="card-glass p-6 mb-4 flex flex-col items-center fade-in fade-1">
+        <div class="relative w-44 h-44 flex items-center justify-center mb-3">
+          <svg width="180" height="180" viewBox="0 0 120 120" class="absolute inset-0 scouter-ring">
+            <circle cx="60" cy="60" r="52" fill="none" stroke="rgba(0,255,136,0.08)" stroke-width="3"/>
+            <circle cx="60" cy="60" r="52" fill="none" stroke="#00FF88" stroke-width="3" stroke-linecap="round"
+              stroke-dasharray=${scoCirc} stroke-dashoffset=${scoCirc*0.15} transform="rotate(-90 60 60)" opacity="0.6"/>
+            <circle cx="60" cy="60" r="46" fill="none" stroke="rgba(0,255,136,0.04)" stroke-width="1"/>
+          </svg>
+          <div class="text-center z-10">
+            <div class="text-[9px] text-scouter font-body uppercase tracking-[3px] mb-1">Power Level</div>
+            <${PowerCounter} value=${pl} className="font-power text-3xl text-scouter"/>
+          </div>
+        </div>
+        <div class="font-display text-sm tracking-wide" style=${{color:tf.color}}>${tf.name}</div>
+        <div class="flex items-center gap-2 mt-2">
+          <${CharImg} src=${IMG[tf.imgKey]} alt="" className="w-8 h-8" charKey=${tf.imgKey}/>
+          <div class="text-[10px] text-gray-500 font-body">
+            Vol: ${fmt(Math.round(totalVol))} + Streak: ${(data.profile.streak||0)*50} + PRs: ${Object.keys(data.prs).length*200} + Séances: ${data.workouts.length*100}
+          </div>
+        </div>
+      </div>
+
+      <!-- Chart -->
+      ${chartData.length>1 && html`<div class="card-glass p-4 mb-4 fade-in fade-2">
+        <div class="text-[10px] text-gray-400 font-body mb-3 uppercase tracking-wider">Progression du volume</div>
+        <div style=${{width:'100%',height:'180px'}}>
+          <${Recharts.ResponsiveContainer} width="100%" height="100%">
+            <${Recharts.AreaChart} data=${chartData}>
+              <${Recharts.defs}><${Recharts.linearGradient} id="vG" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#FFD700" stopOpacity=${0.25}/><stop offset="95%" stopColor="#FFD700" stopOpacity=${0}/>
+              <//><//>
+              <${Recharts.XAxis} dataKey="name" tick=${{fill:'#555',fontSize:10}} axisLine=${false} tickLine=${false}/>
+              <${Recharts.YAxis} tick=${{fill:'#555',fontSize:10}} axisLine=${false} tickLine=${false} width=${35}/>
+              <${Recharts.Tooltip} contentStyle=${{background:'#12121a',border:'1px solid rgba(255,215,0,0.2)',borderRadius:'8px',fontSize:'12px'}} labelStyle=${{color:'#888'}}/>
+              <${Recharts.Area} type="monotone" dataKey="vol" stroke="#FFD700" fill="url(#vG)" strokeWidth=${2}/>
+            <//>
+          <//>
+        </div>
+      </div>`}
+
+      <!-- Heatmap -->
+      <div class="card-glass p-4 mb-4 fade-in fade-3">
+        <div class="text-[10px] text-gray-400 font-body mb-3 uppercase tracking-wider">Heatmap musculaire</div>
+        <div class="grid grid-cols-4 gap-2">
+          ${MUSCLES_ALL.filter(m=>m!=='Cardio').map(m=>{
+            const r=muscleVol[m]?muscleVol[m]/maxMV:0;
+            const bg=r===0?'rgba(255,255,255,0.03)':r<0.25?'rgba(50,205,50,0.15)':r<0.5?'rgba(255,215,0,0.15)':r<0.75?'rgba(255,140,0,0.2)':'rgba(255,69,0,0.2)';
+            const tc=r===0?'#555':r<0.25?'#32CD32':r<0.5?'#FFD700':r<0.75?'#FF8C00':'#FF4500';
+            return html`<div key=${m} class="text-center p-2.5 rounded-xl transition-all" style=${{background:bg}}>
+              <div class="text-[10px] font-body font-medium" style=${{color:tc}}>${m}</div>
+              <div class="text-[10px] font-power mt-0.5" style=${{color:tc}}>${muscleVol[m]?fmt(Math.round(muscleVol[m])):'—'}</div>
+            </div>`;
+          })}
+        </div>
+      </div>
+
+      <!-- PRs -->
+      <div class="card-glass p-4 mb-4 fade-in fade-4">
+        <div class="text-[10px] text-gray-400 font-body mb-3 uppercase tracking-wider">Records Personnels</div>
+        ${prList.length===0?html`<div class="text-center py-6">
+          <${CharImg} src=${IMG.dragonballs} alt="DB" className="w-16 h-16 mx-auto mb-2 opacity-20" charKey="dragonballs"/>
+          <div class="text-sm text-gray-500 font-body">Bats ton premier record !</div>
+        </div>`:prList.map((pr,i)=>html`<div key=${i} class="flex items-center justify-between py-2.5 border-b border-white/5 last:border-0">
+          <div class="flex items-center gap-2.5">
+            <div class="w-7 h-7 rounded-full bg-ki-gold/10 flex items-center justify-center text-xs">🐉</div>
+            <div><div class="text-sm text-white font-body">${pr.name}</div><div class="text-[10px] text-gray-400">${pr.muscle}</div></div>
+          </div>
+          <span class="font-power text-sm text-ki-gold">${pr.weight} kg</span>
+        </div>`)}
+      </div>
+
+      <!-- Stats Grid -->
+      <div class="grid grid-cols-2 gap-3 mb-4 fade-in fade-5">
+        ${[{v:fmt(Math.round(wVol)),l:'Vol. semaine',c:'#FFD700'},{v:ww.length+'/7',l:'Fréquence',c:'#00BFFF'},{v:data.workouts.length,l:'Total séances',c:'#32CD32'},{v:data.profile.streak,l:'Streak jours',c:'#FF4C6A'}].map((s,i)=>html`<div key=${i} class="card-glass p-3.5 text-center">
+          <div class="font-power text-xl" style=${{color:s.c}}>${s.v}</div>
+          <div class="text-[10px] text-gray-400 font-body mt-0.5">${s.l}</div>
+        </div>`)}
+      </div>
+    </div>
+  </div>`;
+}
+
+/* =========================================
+   PAGE 4: NUTRITION
+   ========================================= */
+function NutritionPage({data,set}){
+  const t=today();
+  const log=data.nutrition[t]||[];
+  const[search,setSearch]=useState('');
+  const[showSearch,setShowSearch]=useState(false);
+  const[grams,setGrams]=useState('100');
+  const[selFood,setSelFood]=useState(null);
+  const water=data.waterLog[t]||0;
+
+  const totals=useMemo(()=>log.reduce((a,i)=>({cal:a.cal+i.cal,p:a.p+i.p,c:a.c+i.c,f:a.f+i.f}),{cal:0,p:0,c:0,f:0}),[log]);
+
+  const addFood=f=>{
+    const g=parseFloat(grams)||100,r=g/100;
+    const entry={name:f.name,grams:g,cal:Math.round(f.cal*r),p:+(f.p*r).toFixed(1),c:+(f.c*r).toFixed(1),f:+(f.f*r).toFixed(1)};
+    set(d=>({...d,nutrition:{...d.nutrition,[t]:[...(d.nutrition[t]||[]),entry]}}));
+    setShowSearch(false);setSelFood(null);setSearch('');setGrams('100');
+  };
+
+  const addWater=()=>set(d=>({...d,waterLog:{...d.waterLog,[t]:(d.waterLog[t]||0)+1}}));
+
+  const calPct=Math.min(100,totals.cal/data.profile.calGoal*100);
+  const calClr=calPct<75?'#32CD32':calPct<95?'#FFD700':'#FF4500';
+  const macros=[
+    {label:'Protéines',val:totals.p,tgt:data.profile.pTarget,color:'#00BFFF'},
+    {label:'Glucides',val:totals.c,tgt:data.profile.cTarget,color:'#FFD700'},
+    {label:'Lipides',val:totals.f,tgt:data.profile.fTarget,color:'#FF4C6A'}
+  ];
+
+  const filtered=search?FOODS.filter(f=>f.name.toLowerCase().includes(search.toLowerCase())).slice(0,25):FOODS.slice(0,25);
+
+  const PLANS=[
+    {name:'Plan Goku',desc:'Bulk 3500 kcal',cal:3500,imgKey:'goku_base',color:'#FFD700'},
+    {name:'Plan Vegeta',desc:'Lean 2800 kcal',cal:2800,imgKey:'vegeta',color:'#00BFFF'},
+    {name:'Plan Trunks',desc:'Maintenance 2200 kcal',cal:2200,imgKey:'trunks',color:'#9B59B6'},
+    {name:'Plan Krillin',desc:'Cut 1800 kcal',cal:1800,imgKey:'krillin',color:'#FF4C6A'}
+  ];
+
+  const circR=22,circC=2*Math.PI*circR;
+
+  if(showSearch){
+    return html`<div class="page-bg-nutri min-h-screen" style=${{paddingTop:'max(12px, calc(var(--safe-top) + 8px))'}}>
+      <div class="px-4 max-w-lg mx-auto">
+        <div class="flex items-center gap-3 mb-4">
+          <button onClick=${()=>{setShowSearch(false);setSelFood(null)}} class="touch-btn w-11 h-11 rounded-xl bg-white/5 text-gray-300 text-lg">←</button>
+          <div class="font-display text-xl text-white">Ajouter un aliment</div>
+        </div>
+        ${selFood && html`<div class="card-glass p-4 mb-4">
+          <div class="font-body font-semibold text-white mb-3">${selFood.name}</div>
+          <div class="flex items-end gap-3 mb-3">
+            <div class="flex-1">
+              <label class="text-[10px] text-gray-400 block mb-1.5">Quantité (g)</label>
+              <input type="number" inputmode="numeric" value=${grams} onInput=${e=>setGrams(e.target.value)} class="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-3 text-center font-power text-lg text-white focus:border-senzu/60 focus:outline-none transition-all" style=${{minHeight:'48px'}}/>
+            </div>
+            <button onClick=${()=>addFood(selFood)} class="ki-btn px-6 py-3 rounded-xl font-display text-black" style=${{minHeight:'48px'}}>AJOUTER</button>
+          </div>
+          <div class="grid grid-cols-4 gap-2 text-center text-xs">
+            ${[{l:'kcal',v:Math.round(selFood.cal*(parseFloat(grams)||100)/100),c:'#fff'},{l:'Prot',v:(selFood.p*(parseFloat(grams)||100)/100).toFixed(1),c:'#00BFFF'},{l:'Gluc',v:(selFood.c*(parseFloat(grams)||100)/100).toFixed(1),c:'#FFD700'},{l:'Lip',v:(selFood.f*(parseFloat(grams)||100)/100).toFixed(1),c:'#FF4C6A'}].map((m,i)=>html`<div key=${i}><span class="font-power" style=${{color:m.c}}>${m.v}</span><br/><span class="text-gray-400">${m.l}</span></div>`)}
+          </div>
+        </div>`}
+        <input type="text" placeholder="Rechercher un aliment... (${FOODS.length} disponibles)" value=${search} onInput=${e=>setSearch(e.target.value)} class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3.5 text-white font-body mb-3 focus:border-senzu/60 focus:outline-none transition-all" style=${{minHeight:'48px'}} autoFocus/>
+        <div class="space-y-1.5 smooth-scroll" style=${{maxHeight:'calc(100vh - 280px)',overflowY:'auto'}}>
+          ${filtered.map((f,i)=>html`<button key=${i} onClick=${()=>setSelFood(f)} class="w-full card-glass p-3.5 flex items-center justify-between touch-btn rounded-2xl ${selFood===f?'border-senzu/40':''}">
+            <div class="text-left min-w-0 flex-1">
+              <div class="font-body text-sm text-white">${f.name}</div>
+              <div class="text-[10px] text-gray-400 mt-0.5">P:${f.p}g · G:${f.c}g · L:${f.f}g /100g</div>
+            </div>
+            <span class="font-power text-xs text-ki-gold ml-2">${f.cal} kcal</span>
+          </button>`)}
+        </div>
+      </div>
+    </div>`;
+  }
+
+  return html`<div class="page-bg-nutri min-h-screen" style=${{paddingTop:'max(12px, calc(var(--safe-top) + 8px))'}}>
+    <div class="px-4 max-w-lg mx-auto">
+      <div class="font-display text-2xl text-white mb-5 fade-in tracking-wide">Senzu Bean Counter</div>
+
+      <!-- Cal HP Bar -->
+      <div class="card-glass p-4 mb-4 fade-in fade-1">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xs text-gray-400 font-body">Calories</span>
+          <span class="font-power text-sm" style=${{color:calClr}}>${totals.cal} / ${data.profile.calGoal}</span>
+        </div>
+        <div class="h-4 bg-white/6 rounded-full overflow-hidden">
+          <div class="h-full rounded-full transition-all duration-700 ease-out" style=${{width:calPct+'%',background:'linear-gradient(90deg,'+calClr+','+calClr+'cc)'}}/>
+        </div>
+      </div>
+
+      <!-- Macro Circles -->
+      <div class="grid grid-cols-3 gap-3 mb-4 fade-in fade-2">
+        ${macros.map((m,i)=>{
+          const pct=Math.min(100,m.val/m.tgt*100);
+          return html`<div key=${i} class="card-glass p-3.5 flex flex-col items-center">
+            <svg width="58" height="58" viewBox="0 0 56 56">
+              <circle cx="28" cy="28" r=${circR} fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="4"/>
+              <circle cx="28" cy="28" r=${circR} fill="none" stroke=${m.color} stroke-width="4" stroke-linecap="round"
+                stroke-dasharray=${circC} stroke-dashoffset=${circC*(1-pct/100)} transform="rotate(-90 28 28)" style=${{transition:'stroke-dashoffset 0.7s ease'}}/>
+              <text x="28" y="31" text-anchor="middle" fill="white" font-size="11" font-family="Orbitron">${Math.round(m.val)}</text>
+            </svg>
+            <div class="text-[10px] text-gray-400 mt-1.5 font-body">${m.label}</div>
+            <div class="text-[10px] font-power" style=${{color:m.color}}>${Math.round(m.val)}/${m.tgt}g</div>
+          </div>`;
+        })}
+      </div>
+
+      <!-- Add food -->
+      <button onClick=${()=>setShowSearch(true)} class="ki-btn w-full py-3.5 rounded-xl font-display text-black mb-4 fade-in fade-3 tracking-wider">+ AJOUTER UN ALIMENT</button>
+
+      <!-- Today log -->
+      ${log.length>0 && html`<div class="card-glass p-4 mb-4 fade-in fade-4">
+        <div class="text-[10px] text-gray-400 font-body mb-2 uppercase tracking-wider">Aujourd'hui</div>
+        ${log.map((item,i)=>html`<div key=${i} class="flex items-center justify-between py-2.5 border-b border-white/5 last:border-0">
+          <div><div class="text-sm text-white font-body">${item.name}</div><div class="text-[10px] text-gray-400">${item.grams}g</div></div>
+          <div class="text-right"><div class="font-power text-xs text-ki-gold">${item.cal} kcal</div><div class="text-[10px] text-gray-400">P:${item.p} G:${item.c} L:${item.f}</div></div>
+        </div>`)}
+      </div>`}
+
+      <!-- Water -->
+      <div class="card-glass p-4 mb-4 fade-in fade-5">
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-sm text-white font-body font-medium">Eau</span>
+          <span class="text-xs text-gray-400 font-body">${water}/8 verres</span>
+        </div>
+        <div class="flex gap-2 items-center">
+          <div class="flex gap-2 flex-1 flex-wrap">
+            ${[0,1,2,3,4,5,6,7].map(i=>html`<div key=${i} class="w-8 h-8 rounded-full flex items-center justify-center text-base transition-all duration-300" style=${{background:i<water?'rgba(50,205,50,0.15)':'rgba(255,255,255,0.03)',boxShadow:i<water?'0 0 8px rgba(50,205,50,0.2)':'none'}}>${i<water?'🫘':'💧'}</div>`)}
+          </div>
+          <button onClick=${addWater} class="touch-btn bg-senzu/15 border border-senzu/25 text-senzu px-4 py-2.5 rounded-xl text-xs font-body font-semibold">+1</button>
+        </div>
+      </div>
+
+      <!-- Meal Plans -->
+      <div class="fade-in fade-6">
+        <div class="text-[10px] text-gray-400 font-body mb-3 uppercase tracking-wider">Plans nutritionnels</div>
+        <div class="grid grid-cols-2 gap-3">
+          ${PLANS.map((mp,i)=>html`<div key=${i} class="card-glass p-3.5 relative overflow-hidden">
+            <div class="absolute -right-2 -bottom-2 w-16 h-16 opacity-15">
+              <${CharImg} src=${IMG[mp.imgKey]} alt=${mp.name} className="w-full h-full" charKey=${mp.imgKey}/>
+            </div>
+            <div class="relative z-10">
+              <div class="font-display text-sm tracking-wide" style=${{color:mp.color}}>${mp.name}</div>
+              <div class="text-[10px] text-gray-400 font-body mt-0.5">${mp.desc}</div>
+              <button onClick=${()=>set(d=>({...d,profile:{...d.profile,calGoal:mp.cal}}))} class="touch-btn mt-2 text-[10px] px-3 py-1.5 rounded-lg bg-white/5 text-gray-300 font-body border border-white/5">Appliquer</button>
+            </div>
+          </div>`)}
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* =========================================
+   PAGE 5: PROFILE
+   ========================================= */
+function ProfilePage({data,set,pl,tf}){
+  const avatars=['goku_base','goku_ssj','goku_blue','vegeta','vegeta_blue','gohan','trunks','piccolo','krillin','broly'];
+  const[editName,setEditName]=useState(false);
+  const[tmpName,setTmpName]=useState(data.profile.name);
+
+  const levels=[
+    {name:'Humain',pl:0,color:'#888',imgKey:'krillin'},
+    {name:'Saiyan',pl:1001,color:'#fff',imgKey:'goku_base'},
+    {name:'Super Saiyan',pl:5001,color:'#FFD700',imgKey:'goku_ssj'},
+    {name:'Super Saiyan 2',pl:15001,color:'#FFD700',imgKey:'gohan'},
+    {name:'Super Saiyan 3',pl:50001,color:'#FFA500',imgKey:'goku_ssj'},
+    {name:'Super Saiyan God',pl:100001,color:'#FF4C6A',imgKey:'vegeta_blue'},
+    {name:'Super Saiyan Blue',pl:500001,color:'#00BFFF',imgKey:'goku_blue'}
+  ];
+
+  const badges=[
+    {icon:'🥊',label:'Première séance',unlocked:data.workouts.length>=1},
+    {icon:'🔥',label:'Série de 7 jours',unlocked:data.profile.streak>=7},
+    {icon:'💪',label:'10 séances',unlocked:data.workouts.length>=10},
+    {icon:'⭐',label:'Premier PR',unlocked:Object.keys(data.prs).length>=1},
+    {icon:'🐉',label:'7 Dragon Balls',unlocked:Object.keys(data.prs).length>=7},
+    {icon:'👑',label:'30 séances',unlocked:data.workouts.length>=30},
+    {icon:'🔥',label:'30 jours streak',unlocked:data.profile.streak>=30},
+    {icon:'💎',label:'50 PRs',unlocked:Object.keys(data.prs).length>=50},
+    {icon:'🏆',label:'100 séances',unlocked:data.workouts.length>=100}
+  ];
+
+  return html`<div class="page-bg-profile min-h-screen" style=${{paddingTop:'max(12px, calc(var(--safe-top) + 8px))'}}>
+    <div class="px-4 max-w-lg mx-auto">
+      <div class="font-display text-2xl text-white mb-5 fade-in tracking-wide">Capsule Corp</div>
+
+      <!-- Profile Card -->
+      <div class="card-glass p-6 mb-4 flex flex-col items-center fade-in fade-1">
+        <div class="${tf.aura} w-32 h-32 rounded-full flex items-center justify-center mb-4">
+          <${CharImg} src=${IMG[data.profile.avatar]} alt="Avatar" className="w-28 h-28" charKey=${data.profile.avatar}/>
+        </div>
+        ${editName?html`<div class="flex gap-2 items-center">
+          <input type="text" value=${tmpName} onInput=${e=>setTmpName(e.target.value)} class="bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white font-body text-center focus:border-ki-gold/60 focus:outline-none" style=${{minHeight:'44px'}} autoFocus/>
+          <button onClick=${()=>{set(d=>({...d,profile:{...d.profile,name:tmpName}}));setEditName(false)}} class="touch-btn bg-ki-gold text-black px-4 py-2.5 rounded-xl font-body text-sm font-semibold">OK</button>
+        </div>`:html`<button onClick=${()=>setEditName(true)} class="touch-btn font-display text-2xl text-white tracking-wide">${data.profile.name} <span class="text-gray-500 text-base">✏️</span></button>`}
+        <div class="font-power text-sm text-ki-gold mt-2">PL: ${fmt(pl)}</div>
+        <div class="text-xs font-body mt-1" style=${{color:tf.color}}>${tf.name}</div>
+      </div>
+
+      <!-- Avatar Selection -->
+      <div class="card-glass p-4 mb-4 fade-in fade-2">
+        <div class="text-[10px] text-gray-400 font-body mb-3 uppercase tracking-wider">Choisis ton avatar</div>
+        <div class="grid grid-cols-5 gap-3">
+          ${avatars.map(a=>html`<button key=${a} onClick=${()=>set(d=>({...d,profile:{...d.profile,avatar:a}}))} class="touch-btn w-full aspect-square rounded-full flex items-center justify-center transition-all ${data.profile.avatar===a?'ring-2 ring-ki-gold bg-white/10 scale-105':'bg-white/5'}">
+            <${CharImg} src=${IMG[a]} alt=${a} className="w-12 h-12" charKey=${a}/>
+          </button>`)}
+        </div>
+      </div>
+
+      <!-- Transformation Timeline -->
+      <div class="card-glass p-4 mb-4 fade-in fade-3">
+        <div class="text-[10px] text-gray-400 font-body mb-3 uppercase tracking-wider">Niveaux de transformation</div>
+        <div class="space-y-3">
+          ${levels.map((lv,i)=>html`<div key=${i} class="flex items-center gap-3 transition-opacity ${pl>=lv.pl?'opacity-100':'opacity-25'}">
+            <div class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center shrink-0 overflow-hidden">
+              <${CharImg} src=${IMG[lv.imgKey]} alt=${lv.name} className="w-10 h-10" charKey=${lv.imgKey}/>
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="font-body text-sm font-medium truncate" style=${{color:pl>=lv.pl?lv.color:'#555'}}>${lv.name}</div>
+              <div class="text-[10px] text-gray-500 font-body">PL ${fmt(lv.pl)}+</div>
+            </div>
+            ${pl>=lv.pl?html`<span class="text-senzu text-base">✓</span>`:html`<span class="text-gray-600">🔒</span>`}
+          </div>`)}
+        </div>
+      </div>
+
+      <!-- Settings -->
+      <div class="card-glass p-4 mb-4 fade-in fade-4">
+        <div class="text-[10px] text-gray-400 font-body mb-3 uppercase tracking-wider">Paramètres</div>
+        <div class="space-y-4">
+          ${[
+            {label:'Objectif calories',key:'calGoal',step:100,min:1200,color:'#FFD700'},
+            {label:'Protéines (g)',key:'pTarget',step:10,min:50,color:'#00BFFF'},
+            {label:'Glucides (g)',key:'cTarget',step:10,min:50,color:'#FFD700'},
+            {label:'Lipides (g)',key:'fTarget',step:5,min:20,color:'#FF4C6A'}
+          ].map(s=>html`<div key=${s.key} class="flex items-center justify-between">
+            <span class="text-sm text-white font-body">${s.label}</span>
+            <div class="flex items-center gap-2">
+              <button onClick=${()=>set(d=>({...d,profile:{...d.profile,[s.key]:Math.max(s.min,d.profile[s.key]-s.step)}}))} class="touch-btn w-9 h-9 rounded-lg bg-white/5 text-white text-sm">−</button>
+              <span class="font-power text-sm w-14 text-center" style=${{color:s.color}}>${data.profile[s.key]}</span>
+              <button onClick=${()=>set(d=>({...d,profile:{...d.profile,[s.key]:d.profile[s.key]+s.step}}))} class="touch-btn w-9 h-9 rounded-lg bg-white/5 text-white text-sm">+</button>
+            </div>
+          </div>`)}
+        </div>
+      </div>
+
+      <!-- Badges -->
+      <div class="card-glass p-4 mb-4 fade-in fade-5">
+        <div class="text-[10px] text-gray-400 font-body mb-3 uppercase tracking-wider">Badges & Réussites</div>
+        <div class="grid grid-cols-3 gap-2.5">
+          ${badges.map((b,i)=>html`<div key=${i} class="text-center p-2.5 rounded-xl transition-all ${b.unlocked?'bg-ki-gold/10 border border-ki-gold/15':'bg-white/3'}">
+            <div class="text-2xl mb-1 ${b.unlocked?'':'opacity-20'}">${b.icon}</div>
+            <div class="text-[10px] font-body ${b.unlocked?'text-ki-gold':'text-gray-600'}">${b.label}</div>
+          </div>`)}
+        </div>
+      </div>
+
+      <!-- Reset + Footer -->
+      <button onClick=${()=>{if(confirm('Réinitialiser toutes les données ? Cette action est irréversible.')){localStorage.removeItem('sf3_data');location.reload()}}} class="w-full py-3.5 rounded-xl bg-red-500/8 border border-red-500/15 text-red-400 text-sm font-body mb-6 touch-btn">Réinitialiser les données</button>
+
+      <div class="text-center py-6">
+        <${Logo} size=${28}/>
+        <div class="text-gray-500 text-xs font-body mt-2">Propulsé par <span class="text-ki-gold font-semibold">Katrava</span></div>
+        <div class="text-gray-600 text-[10px] font-body mt-1">v3.0 · ${EXERCISES.length} exercices · ${FOODS.length} aliments</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* =========================================
+   RENDER
+   ========================================= */
+ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(App));
+
+/* Auto-scroll inputs into view on mobile */
+document.addEventListener('focusin',e=>{
+  if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA'){
+    setTimeout(()=>{e.target.scrollIntoView({behavior:'smooth',block:'center'})},300);
+  }
+});
+</script>
+</body>
+</html>
